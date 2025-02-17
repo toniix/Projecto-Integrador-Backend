@@ -1,0 +1,23 @@
+
+
+spring:
+  application:
+    name: clavecompas
+  datasource:
+    jdbcUrl : jdbc:postgresql://localhost:5432/clavecompas
+    username: postgres
+    password: 12345678
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+server:
+  port: 8190
+  servlet:
+    context-path: /clavecompas
+
+
+
+
+
+
+

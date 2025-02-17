@@ -1,7 +1,8 @@
 package com.proyectofinal.clave_compas.service;
 
-import com.proyectofinal.clave_compas.model.Imagen;
-import com.proyectofinal.clave_compas.model.Instrumento;
+import com.proyectofinal.clave_compas.bd.clavecompas.entities.ImageEntity;
+
+import com.proyectofinal.clave_compas.bd.clavecompas.entities.InstrumentEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,13 +19,13 @@ public class ImageServices {
     private static final String UPLOAD_DIR = System.getProperty("user.dir") + "/uploads/";
 
 
-    private HashMap<Long, Imagen> imagenes ; // CAMBIAR A REPOSITORIO
+    private HashMap<Integer, ImageEntity> imagenes ; // CAMBIAR A REPOSITORIO
 
     public ImageServices() {
         this.imagenes = new HashMap<>();
     }
 
-    public void saveImage(MultipartFile file, Instrumento instrumento) {
+    public void saveImage(MultipartFile file, InstrumentEntity instrumento) {
         if (file.isEmpty()) {
             throw new RuntimeException("El archivo está vacío");
         }
@@ -42,13 +43,13 @@ public class ImageServices {
         }
     }
 
-    private void createImagen(String ruta, Instrumento instrumento) {
-        Imagen imagen = new Imagen();
-        imagen.setUrl(ruta);
-        if (instrumento.getImagenes() == null) {
-            instrumento.setImagenes(new ArrayList<>());
+    private void createImagen(String ruta, InstrumentEntity instrumento) {
+        ImageEntity imagen = new ImageEntity();
+        imagen.setImageUrl(ruta);
+        if (instrumento.getImages() == null) {
+            instrumento.setImages(new ArrayList<>());
         }
-        instrumento.getImagenes().add(imagen);
-        imagenes.put(imagen.getId_imagen(),imagen); // GUARDO POR AHORA --> CAMBIAR A SAVE EN BD
+        instrumento.getImages().add(imagen);
+        imagenes.put(imagen.getIdImage(),imagen); // GUARDO POR AHORA --> CAMBIAR A SAVE EN BD
     }
 }

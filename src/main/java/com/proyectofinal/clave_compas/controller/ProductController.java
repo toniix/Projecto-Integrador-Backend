@@ -1,26 +1,20 @@
 package com.proyectofinal.clave_compas.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.proyectofinal.clave_compas.dto.InstrumentoDto;
-import com.proyectofinal.clave_compas.exception.NotValidInstrumentData;
-import com.proyectofinal.clave_compas.exception.ProductAlreadyOnRepositoryException;
-import com.proyectofinal.clave_compas.model.Instrumento;
-import com.proyectofinal.clave_compas.service.ImageServices;
+
 import com.proyectofinal.clave_compas.service.ProductServices;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.proyectofinal.clave_compas.service.dto.InstrumentDTO;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileNotFoundException;
 
 @RestController
-@RequestMapping("/api/v1/productos")
+@RequestMapping(value = "instruments")
+@RequiredArgsConstructor
 public class ProductController {
 
-    private final ProductServices productServices;
+    /*private final ProductServices productServices;
 
     private final ImageServices imageServices;
 
@@ -50,5 +44,12 @@ public class ProductController {
             throw new RuntimeException(e);
         }
 
+    }*/
+
+    private final ProductServices productServices;
+
+    @GetMapping
+    public ResponseEntity<Page<InstrumentDTO>> findAll(@RequestParam int page, @RequestParam int pageSize) {
+        return ResponseEntity.ok(productServices.getAllInstruments(page, pageSize));
     }
 }
