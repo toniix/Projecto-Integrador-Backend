@@ -46,10 +46,6 @@ public class ProductController {
             productServices.saveProduct(productDto);
             imageServices.saveImage(file, productEntity);
             return ResponseEntity.ok(productEntity);
-        } catch (ProductAlreadyOnRepositoryException e) {
-            return ResponseEntity.badRequest().build();
-        } catch (JsonMappingException e) {
-            throw new RuntimeException(e);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

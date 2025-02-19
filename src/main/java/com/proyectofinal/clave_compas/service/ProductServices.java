@@ -38,11 +38,7 @@ public class ProductServices {
         Optional.ofNullable(productDTO.name())
                 .flatMap(productRepository::findByName)
                 .ifPresent(p -> {
-                    try {
-                        throw new ProductAlreadyOnRepositoryException(productDTO.name());
-                    } catch (ProductAlreadyOnRepositoryException e) {
-                        throw new RuntimeException(e);
-                    }
+                        throw new ProductAlreadyOnRepositoryException("El producto"+productDTO.name()+ " ya existe en base de datos");
                 });
 
         CategoryEntity categoryEntity = categoryRepository.findByIdCategory(productDTO.idCategory())
