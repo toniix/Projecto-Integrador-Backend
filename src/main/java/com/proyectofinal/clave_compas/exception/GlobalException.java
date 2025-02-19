@@ -21,4 +21,10 @@ public class GlobalException {
         BodyException bodyException = new BodyException(HttpStatus.BAD_REQUEST.value(),bre.getMessage());
         return new ResponseEntity<>(bodyException,HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(ProductAlreadyOnRepositoryException.class)
+    public ResponseEntity<BodyException> tratamientoRNFE(ProductAlreadyOnRepositoryException bre){
+        BodyException bodyException = new BodyException(HttpStatus.CONFLICT.value(),bre.getMessage());
+        return new ResponseEntity<>(bodyException,HttpStatus.CONFLICT);
+    }
 }
