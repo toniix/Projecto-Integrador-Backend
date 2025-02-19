@@ -1,41 +1,51 @@
 package com.proyectofinal.clave_compas.controller;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.proyectofinal.clave_compas.bd.clavecompas.entities.ProductEntity;
+import com.proyectofinal.clave_compas.exception.NotValidProductData;
+import com.proyectofinal.clave_compas.exception.ProductAlreadyOnRepositoryException;
+import com.proyectofinal.clave_compas.mappers.ProductMapper;
+import com.proyectofinal.clave_compas.service.ImageServices;
 import com.proyectofinal.clave_compas.service.ProductServices;
-import com.proyectofinal.clave_compas.service.dto.InstrumentDTO;
+import com.proyectofinal.clave_compas.service.dto.ProductDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.FileNotFoundException;
 
 
 @RestController
-@RequestMapping(value = "instruments")
+@RequestMapping(value = "products")
 @RequiredArgsConstructor
 public class ProductController {
 
-    /*private final ProductServices productServices;
-
+    private final ProductServices productServices;
     private final ImageServices imageServices;
+    
 
-    public ProductController(@Autowired ProductServices productServices, ImageServices imageServices) {
-        this.productServices = productServices;
-        this.imageServices = imageServices;
+    @GetMapping
+    public ResponseEntity<Page<ProductDTO>> findAll(@RequestParam int page, @RequestParam int pageSize) {
+        return ResponseEntity.ok(productServices.getAllProducts(page, pageSize));
     }
-
+    
     @PostMapping
-    private ResponseEntity<Instrumento> registrarProducto(@RequestParam String instrumentoDtoJson,
-                                                          @RequestParam("file") MultipartFile file) throws NotValidInstrumentData, FileNotFoundException {
+    private ResponseEntity<ProductEntity> registrarProducto(@RequestParam String instrumentDtoJson,
+                                                            @RequestParam("file") MultipartFile file) throws NotValidProductData, FileNotFoundException {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            InstrumentoDto instrumentoDto = objectMapper.readValue(instrumentoDtoJson, InstrumentoDto.class);
-            if (!instrumentoDto.isValid()) throw new NotValidInstrumentData("Argumentos no validos");
+            ProductDTO productDto = objectMapper.readValue(instrumentDtoJson, ProductDTO.class);
+            //if (!productDto.isValid()) throw new NotValidProductData("Argumentos no validos");
             if (file.isEmpty()) throw new FileNotFoundException();
-
-            Instrumento instrumento = instrumentoDto.toEntity();
-            imageServices.saveImage(file, instrumento);
-            productServices.saveProduct(instrumento, instrumentoDto);
-            return ResponseEntity.ok(instrumento);
+            ProductEntity productEntity = ProductMapper.INSTANCE.toEntity(productDto);
+            productServices.saveProduct(productDto);
+            imageServices.saveImage(file, productEntity);
+            return ResponseEntity.ok(productEntity);
         } catch (ProductAlreadyOnRepositoryException e) {
             return ResponseEntity.badRequest().build();
         } catch (JsonMappingException e) {
@@ -44,12 +54,5 @@ public class ProductController {
             throw new RuntimeException(e);
         }
 
-    }*/
-
-    private final ProductServices productServices;
-
-    @GetMapping
-    public ResponseEntity<Page<InstrumentDTO>> findAll(@RequestParam int page, @RequestParam int pageSize) {
-        return ResponseEntity.ok(productServices.getAllInstruments(page, pageSize));
     }
 }

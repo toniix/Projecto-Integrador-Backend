@@ -10,16 +10,16 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
-@Table(name = "instrument", schema = "clavecompas")
+@Table(name = "product", schema = "clavecompas")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class InstrumentEntity {
+public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_instrument")
-    private Integer idInstrument;
+    @Column(name = "id_product")
+    private Integer idProduct;
 
     @Column(nullable = false, length = 100)
     private String name;
@@ -48,7 +48,7 @@ public class InstrumentEntity {
     @JoinColumn(name = "id_category", nullable = false)
     private CategoryEntity category;
 
-    @OneToMany(mappedBy = "instrument", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ImageEntity> images;
 }
 

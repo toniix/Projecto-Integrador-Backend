@@ -1,8 +1,8 @@
 package com.proyectofinal.clave_compas.mappers;
 
 import com.proyectofinal.clave_compas.bd.clavecompas.entities.ImageEntity;
-import com.proyectofinal.clave_compas.bd.clavecompas.entities.InstrumentEntity;
-import com.proyectofinal.clave_compas.service.dto.InstrumentDTO;
+import com.proyectofinal.clave_compas.bd.clavecompas.entities.ProductEntity;
+import com.proyectofinal.clave_compas.service.dto.ProductDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -14,16 +14,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper
-public interface InstrumentMapper {
+public interface ProductMapper {
 
-    InstrumentMapper INSTANCE = Mappers.getMapper(InstrumentMapper.class);
+    ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
     @Mapping(source = "category.idCategory", target = "idCategory")
     @Mapping(source = "images", target = "imageUrls", qualifiedByName = "mapImagesToUrls")
-    InstrumentDTO toDTO(InstrumentEntity entity);
+    ProductDTO toDTO(ProductEntity entity);
 
     @Mapping(source = "idCategory", target = "category.idCategory")
-    InstrumentEntity toEntity(InstrumentDTO dto);
+    ProductEntity toEntity(ProductDTO dto);
 
     @Named("mapImagesToUrls") // Agregar Named aquí
     default List<String> mapImagesToUrls(List<ImageEntity> images) {
@@ -35,8 +35,8 @@ public interface InstrumentMapper {
                 .collect(Collectors.toList());
     }
 
-    default Page<InstrumentDTO> toDTOs(Page<InstrumentEntity> entities) {
-        List<InstrumentDTO> dtos = entities.stream()
+    default Page<ProductDTO> toDTOs(Page<ProductEntity> entities) {
+        List<ProductDTO> dtos = entities.stream()
                 .map(this::toDTO)  // Usamos la conversión individual
                 .collect(Collectors.toList());
 

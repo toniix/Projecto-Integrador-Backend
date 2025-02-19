@@ -25,7 +25,7 @@ public class ImageEntity implements Serializable {
     private String imageUrl;
 
     @ManyToOne
-    @JoinColumn(name = "id_instrument", nullable = false)
-    private InstrumentEntity instrument;
+    @JoinColumn(name = "id_product", nullable = false)
+    private ProductEntity product;
 
 }
