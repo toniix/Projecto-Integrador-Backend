@@ -1,14 +1,17 @@
 package com.proyectofinal.clave_compas.exception;
 
-import lombok.AllArgsConstructor;
+
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Map;
+
 @Getter
 @Setter
-@AllArgsConstructor
+@Builder
 public class BodyException {
     private int statusCode;
     private String message;
-
+    private Map<String, String> NotValidParams;
 }
