@@ -14,7 +14,7 @@ public record ProductDTO(
         @NotBlank
         String model,
         @Min(1900)
-        @Max(2100)
+        @Max(2025)
         Integer year,
         @Min(1)
         Integer stock,
@@ -24,11 +24,9 @@ public record ProductDTO(
         Boolean available,
         @NotNull
         Integer idCategory,
+        @NotEmpty(message = "La lista no puede estar vacía")
+        @Size(min = 1, max = 6, message = "Debe contener entre 1 y 6 imagenes")
         List<String> imageUrls
 ) {
-    public ProductDTO(Integer idProduct, String name, String brand, String model, Integer year,
-                      Integer stock, String description, BigDecimal price, Boolean available,
-                      Integer idCategory) {
-        this(idProduct, name, brand, model, year, stock, description, price, available, idCategory, List.of());
-    }
+
 }
