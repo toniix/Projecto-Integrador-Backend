@@ -7,6 +7,7 @@ import com.proyectofinal.clave_compas.bd.clavecompas.repositories.CategoryReposi
 import com.proyectofinal.clave_compas.bd.clavecompas.repositories.ProductRepository;
 
 
+import com.proyectofinal.clave_compas.exception.NotValidCategory;
 import com.proyectofinal.clave_compas.exception.ProductAlreadyOnRepositoryException;
 import com.proyectofinal.clave_compas.mappers.ProductMapper;
 import com.proyectofinal.clave_compas.service.dto.ProductDTO;
@@ -15,8 +16,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
 import java.util.Optional;
 
 
@@ -27,22 +32,23 @@ public class ProductServices {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final ImageServices imageServices;
 
-    public Page<ProductDTO> getAllProducts(int page, int size ) {
+    public Page<ProductDTO> getPaginateProducts(int page, int size ) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<ProductEntity> instruments = productRepository.findAll(pageable);
-        return ProductMapper.INSTANCE.toDTOs(instruments);
+        Page<ProductEntity> products = productRepository.findAll(pageable);
+        return ProductMapper.INSTANCE.toDTOs(products);
     }
-
-    public void saveProduct( ProductDTO productDTO) throws ProductAlreadyOnRepositoryException {
+    @Transactional(transactionManager = "txManagerClavecompas", propagation = Propagation.REQUIRED, rollbackFor = {Exception.class, SQLException.class})
+    public ProductEntity saveProduct(ProductDTO productDTO) throws ProductAlreadyOnRepositoryException {
         Optional.ofNullable(productDTO.name())
                 .flatMap(productRepository::findByName)
                 .ifPresent(p -> {
-                        throw new ProductAlreadyOnRepositoryException("El producto"+productDTO.name()+ " ya existe en base de datos");
+                        throw new ProductAlreadyOnRepositoryException("El producto: "+productDTO.name()+ " ya existe en base de datos");
                 });
 
         CategoryEntity categoryEntity = categoryRepository.findByIdCategory(productDTO.idCategory())
-                .orElseThrow(() -> new RuntimeException("Categoria no disponibleo"));
+                .orElseThrow(() -> new NotValidCategory("Categoria no disponible"));
         ProductEntity productEntity = ProductMapper.INSTANCE.toEntity(productDTO);
 
         // FIXME: se reemplaza por un mapper para mas simplicidad
@@ -53,7 +59,9 @@ public class ProductServices {
         instrument.setStock(instrumentDto.getStock());
         instrument.setModel(instrumentDto.getModel());*/
 
-        productRepository.save(productEntity);
+        ProductEntity productSaved = productRepository.save(productEntity);
+        imageServices.saveImages(productSaved.getIdProduct(),productDTO.imageUrls());
+        return productSaved;
     }
 
 }

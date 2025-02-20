@@ -23,6 +23,16 @@ server:
   servlet:
     context-path: /clavecompas
 
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    url: /v3/api-docs
+  paths-to-match: /**
+
 
 
 

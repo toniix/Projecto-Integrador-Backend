@@ -47,7 +47,7 @@ public class BDConfig {
 
     //Para usar transacciones
     @Bean(name = "txManagerClavecompas")
-    PlatformTransactionManager seguridadTransactionManager(
+    PlatformTransactionManager clavecompasTransactionManager(
             @Qualifier("clavecompasEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
         return new JpaTransactionManager(entityManagerFactory);
     }
