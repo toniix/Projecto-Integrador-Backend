@@ -1,5 +1,6 @@
 package com.proyectofinal.clave_compas.exception;
 
+import com.proyectofinal.clave_compas.controller.responses.GlobalResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -14,8 +15,8 @@ import java.util.Map;
 public class GlobalException {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<BodyException> tratamientoRNFE(ResourceNotFoundException rnfe){
-        BodyException bodyException = BodyException.builder()
+    public ResponseEntity<GlobalResponse> tratamientoRNFE(ResourceNotFoundException rnfe){
+        GlobalResponse bodyException = GlobalResponse.builder()
                                         .statusCode(HttpStatus.NOT_FOUND.value())
                                         .message(rnfe.getMessage())
                                         .build();
@@ -23,8 +24,8 @@ public class GlobalException {
     }
 
     @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<BodyException> tratamientoRNFE(BadRequestException bre){
-        BodyException bodyException = BodyException.builder()
+    public ResponseEntity<GlobalResponse> tratamientoRNFE(BadRequestException bre){
+        GlobalResponse bodyException = GlobalResponse.builder()
                                     .statusCode(HttpStatus.NOT_FOUND.value())
                                     .message(bre.getMessage())
                                     .build();
@@ -32,26 +33,33 @@ public class GlobalException {
     }
 
     @ExceptionHandler(ProductAlreadyOnRepositoryException.class)
-    public ResponseEntity<BodyException> tratamientoRNFE(ProductAlreadyOnRepositoryException paore){
-        BodyException bodyException = BodyException.builder()
+    public ResponseEntity<GlobalResponse> tratamientoRNFE(ProductAlreadyOnRepositoryException paore){
+        GlobalResponse bodyException = GlobalResponse.builder()
                 .statusCode(HttpStatus.CONFLICT.value()).message(paore.getMessage()).build();
         return new ResponseEntity<>(bodyException,HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<BodyException> handleValidationExceptions(MethodArgumentNotValidException ex) {
+    public ResponseEntity<GlobalResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(error ->
                 errors.put(error.getField(), error.getDefaultMessage()));
-        BodyException bodyException = BodyException.builder().statusCode(HttpStatus.BAD_REQUEST.value())
-                .message("Parametros no validos").NotValidParams(errors).build();
+        GlobalResponse bodyException = GlobalResponse.builder().statusCode(HttpStatus.BAD_REQUEST.value())
+                .message("Parametros no validos").response(errors).build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bodyException);
     }
 
     @ExceptionHandler(NotValidCategory.class)
-    public ResponseEntity<BodyException> tratamientoRNFE(NotValidCategory bre){
-        BodyException bodyException = BodyException.builder().statusCode(HttpStatus.CONFLICT.value())
+    public ResponseEntity<GlobalResponse> tratamientoRNFE(NotValidCategory bre){
+        GlobalResponse bodyException = GlobalResponse.builder().statusCode(HttpStatus.CONFLICT.value())
                 .message(bre.getMessage()).build();
         return new ResponseEntity<>(bodyException,HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(DeleteOperationException.class)
+    public ResponseEntity<GlobalResponse> tratamientoRNFE(DeleteOperationException bre){
+        GlobalResponse bodyException = GlobalResponse.builder().statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .message(bre.getMessage()).build();
+        return new ResponseEntity<>(bodyException,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

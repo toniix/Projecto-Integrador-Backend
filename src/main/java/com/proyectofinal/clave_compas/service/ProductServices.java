@@ -7,12 +7,15 @@ import com.proyectofinal.clave_compas.bd.clavecompas.repositories.CategoryReposi
 import com.proyectofinal.clave_compas.bd.clavecompas.repositories.ProductRepository;
 
 
+import com.proyectofinal.clave_compas.exception.DeleteOperationException;
 import com.proyectofinal.clave_compas.exception.NotValidCategory;
 import com.proyectofinal.clave_compas.exception.ProductAlreadyOnRepositoryException;
+import com.proyectofinal.clave_compas.exception.ResourceNotFoundException;
 import com.proyectofinal.clave_compas.mappers.ProductMapper;
 import com.proyectofinal.clave_compas.service.dto.ProductDTO;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -62,6 +65,24 @@ public class ProductServices {
         ProductEntity productSaved = productRepository.save(productEntity);
         imageServices.saveImages(productSaved.getIdProduct(),productDTO.imageUrls());
         return productSaved;
+    }
+
+    public ProductDTO getProductById(Integer idProduct) {
+        ProductEntity productEntity = productRepository.findById(idProduct)
+                .orElseThrow(()->new ResourceNotFoundException("El producto con ID " + idProduct + " no existe."));
+        return ProductMapper.INSTANCE.toDTO(productEntity);
+    }
+
+    public void deleteProductById(Integer idProduct) {
+        if (!productRepository.existsById(idProduct)) {
+            throw new ResourceNotFoundException("El producto con ID " + idProduct + " no existe.");
+        }
+
+        try {
+            productRepository.deleteById(idProduct);
+        } catch (Exception e) {
+            throw new DeleteOperationException("Error al eliminar el producto con ID " + idProduct);
+        }
     }
 
 }
