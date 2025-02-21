@@ -56,7 +56,7 @@ public class ProductController {
 
     }
 
-    @PutMapping("/{idProduct}")
+    @DeleteMapping("/{idProduct}")
     public ResponseEntity<GlobalResponse> deleteProductById(@PathVariable Integer idProduct) {
         productServices.deleteProductById(idProduct);
         GlobalResponse gres = GlobalResponse.builder()
