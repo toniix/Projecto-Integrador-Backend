@@ -8,7 +8,6 @@ import com.proyectofinal.clave_compas.service.dto.CategoryDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,5 +23,11 @@ public class CategoryService {
         }
         List<CategoryEntity> subCategories = allCategories.stream().filter(categoryEntity -> categoryEntity.getParentCategory()!=null).toList();
         return CategoryMapper.INSTANCE.odontologosToOdontologosDTO(subCategories);
+    }
+
+    public CategoryEntity saveCategory(CategoryDTO categoria) {
+        CategoryEntity category = CategoryMapper.INSTANCE.toCategoryEntity(categoria);
+        categoryRepository.save(category);
+        return category;
     }
 }

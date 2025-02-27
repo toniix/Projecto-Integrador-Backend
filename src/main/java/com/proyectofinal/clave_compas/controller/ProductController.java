@@ -56,7 +56,7 @@ public class ProductController {
 
     }
 
-    @PutMapping("/{idProduct}")
+    @DeleteMapping("/{idProduct}")
     public ResponseEntity<GlobalResponse> deleteProductById(@PathVariable Integer idProduct) {
         productServices.deleteProductById(idProduct);
         GlobalResponse gres = GlobalResponse.builder()
@@ -65,5 +65,16 @@ public class ProductController {
                 .build();
         return ResponseEntity.ok(gres);
 
+    }
+
+    @PutMapping("/{productoId}/category/{categoriaId}")
+    public ResponseEntity<GlobalResponse> putCategoryToProduct(@PathVariable Integer productoId, @PathVariable Integer categoriaId) {
+        productServices.putCategoryToProduct(productoId, categoriaId);
+        GlobalResponse gres = GlobalResponse.builder()
+                .statusCode(HttpStatus.ACCEPTED.value())
+                .message("Operación exitosa")
+                .response(productServices.getProductById(productoId))
+                .build();
+        return ResponseEntity.ok(gres);
     }
 }

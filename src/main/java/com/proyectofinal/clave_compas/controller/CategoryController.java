@@ -8,9 +8,7 @@ import com.proyectofinal.clave_compas.service.dto.CategoryDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,6 +28,16 @@ public class CategoryController {
                 .response(categoryResponse)
                 .build();
 
+        return ResponseEntity.ok(gres);
+    }
+
+    @PostMapping
+    public ResponseEntity<GlobalResponse> saveCategory(@RequestBody CategoryDTO category) {
+        categoryService.saveCategory(category);
+        GlobalResponse gres = GlobalResponse.builder()
+                .statusCode(HttpStatus.CREATED.value())
+                .message("Operación exitosa")
+                .build();
         return ResponseEntity.ok(gres);
     }
 }

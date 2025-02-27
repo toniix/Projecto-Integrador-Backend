@@ -85,4 +85,13 @@ public class ProductServices {
         }
     }
 
+    public void putCategoryToProduct(Integer productoId, Integer categoriaId) {
+        ProductEntity producto = productRepository.findById(productoId)
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+        CategoryEntity categoria = categoryRepository.findById(categoriaId)
+                .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+        producto.setCategory(categoria);
+        productRepository.save(producto);
+    }
+
 }
