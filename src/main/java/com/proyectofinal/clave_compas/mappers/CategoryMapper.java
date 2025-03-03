@@ -22,5 +22,5 @@ public interface CategoryMapper {
     @Mapping(target = "parentCategory", ignore = true)
     CategoryEntity toCategoryEntity(CategoryDTO categoryDTO);
 
-    List<CategoryDTO> odontologosToOdontologosDTO(List<CategoryEntity> categories);
+    List<CategoryDTO> toDTOs(List<CategoryEntity> categories);
 }

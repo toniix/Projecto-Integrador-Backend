@@ -8,7 +8,6 @@ import com.proyectofinal.clave_compas.service.dto.CategoryDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,6 +22,12 @@ public class CategoryService {
             throw new ResourceNotFoundException("No Category found");
         }
         List<CategoryEntity> subCategories = allCategories.stream().filter(categoryEntity -> categoryEntity.getParentCategory()!=null).toList();
-        return CategoryMapper.INSTANCE.odontologosToOdontologosDTO(subCategories);
+        return CategoryMapper.INSTANCE.toDTOs(subCategories);
+    }
+
+    public CategoryEntity saveCategory(CategoryDTO categoria) {
+        CategoryEntity category = CategoryMapper.INSTANCE.toCategoryEntity(categoria);
+        categoryRepository.save(category);
+        return category;
     }
 }

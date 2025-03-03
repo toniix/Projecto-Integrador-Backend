@@ -62,4 +62,11 @@ public class GlobalException {
                 .message(bre.getMessage()).build();
         return new ResponseEntity<>(bodyException,HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(UserAlreadyOnRepositoryException.class)
+    public ResponseEntity<GlobalResponse> tratamientoRNFE(UserAlreadyOnRepositoryException uaor){
+        GlobalResponse bodyException = GlobalResponse.builder()
+                .statusCode(HttpStatus.CONFLICT.value()).message(uaor.getMessage()).build();
+        return new ResponseEntity<>(bodyException,HttpStatus.CONFLICT);
+    }
 }
