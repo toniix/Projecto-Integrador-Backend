@@ -40,7 +40,7 @@ public class ProductService {
         Page<ProductEntity> products = productRepository.findAll(pageable);
         return ProductMapper.INSTANCE.toDTOs(products);
     }
-    @Transactional(transactionManager = "txManagerClavecompas", propagation = Propagation.REQUIRES_NEW, rollbackFor = {Exception.class, SQLException.class})
+    @Transactional(transactionManager = "txManagerClavecompas", propagation = Propagation.REQUIRED, rollbackFor = {Exception.class, SQLException.class})
     public ProductEntity saveProduct(ProductDTO productDTO) throws ProductAlreadyOnRepositoryException {
         Optional.ofNullable(productDTO.name())
                 .flatMap(productRepository::findByName)

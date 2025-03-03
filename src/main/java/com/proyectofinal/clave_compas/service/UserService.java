@@ -39,7 +39,7 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
-    @Transactional(transactionManager = "txManagerClavecompas", propagation = Propagation.REQUIRES_NEW, rollbackFor = {Exception.class, SQLException.class})
+    @Transactional(transactionManager = "txManagerClavecompas", propagation = Propagation.REQUIRED, rollbackFor = {Exception.class, SQLException.class})
     public UserDTO saveUser(UserDTO userDTO) throws UserAlreadyOnRepositoryException {
         Optional.ofNullable(userDTO.email())
                 .flatMap(userRepository::findByEmail)
@@ -80,5 +80,9 @@ public class UserService {
         UserEntity userEntity = userRepository.findById(id)
                 .orElseThrow(()->new ResourceNotFoundException("El usurio con ID " + id + " no existe."));
         return UserMapper.INSTANCE.toDTO(userEntity);
+    }
+    public UserEntity findById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("El usurio con ID " + id + " no existe."));
     }
 }
