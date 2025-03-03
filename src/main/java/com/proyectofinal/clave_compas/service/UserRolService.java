@@ -15,7 +15,7 @@ public class UserRolService {
 
     private final UserRolRepository userRolRepository;
 
-    @Transactional(transactionManager = "txManagerClavecompas", propagation = Propagation.REQUIRED, rollbackFor = {Exception.class, SQLException.class})
+    @Transactional(transactionManager = "txManagerClavecompas", propagation = Propagation.REQUIRES_NEW, rollbackFor = {Exception.class, SQLException.class})
     public UserRolEntity save(UserRolEntity userRolEntity) {
         return userRolRepository.save(userRolEntity);
     }

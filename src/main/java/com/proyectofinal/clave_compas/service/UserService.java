@@ -39,7 +39,7 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
-    @Transactional(transactionManager = "txManagerClavecompas", propagation = Propagation.REQUIRED, rollbackFor = {Exception.class, SQLException.class})
+    @Transactional(transactionManager = "txManagerClavecompas", propagation = Propagation.REQUIRES_NEW, rollbackFor = {Exception.class, SQLException.class})
     public UserDTO saveUser(UserDTO userDTO) throws UserAlreadyOnRepositoryException {
         Optional.ofNullable(userDTO.email())
                 .flatMap(userRepository::findByEmail)
@@ -59,7 +59,7 @@ public class UserService {
         userRolService.save(userRolEntity);
         return UserMapper.INSTANCE.toDTO(userEntity);
     }
-    @Transactional(transactionManager = "txManagerClavecompas", propagation = Propagation.REQUIRED, rollbackFor = {Exception.class, SQLException.class})
+
     public LoginResponse loginUser(LoginDTO loginDTO) throws ResourceNotFoundException {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.email(), loginDTO.password()));
         UserEntity userEntity = userRepository.findByEmail(loginDTO.email()).orElseThrow();
@@ -72,7 +72,7 @@ public class UserService {
 
     public Page<UserDTO> getPaginateUsers(int page, int size ) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<UserEntity> users = userRepository.findAll(pageable);
+        Page<UserEntity> users = userRepository.findAllByIsAdminNull(pageable);
         return UserMapper.INSTANCE.toDTOs(users);
     }
 

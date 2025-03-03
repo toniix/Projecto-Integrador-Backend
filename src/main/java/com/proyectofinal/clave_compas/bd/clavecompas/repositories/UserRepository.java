@@ -19,12 +19,12 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     @Query("""
         SELECT r.name FROM RolEntity r 
-        JOIN UserRolEntity ur ON ur.user.id = r.id
+        JOIN UserRolEntity ur ON ur.role.id = r.id
         WHERE ur.user.id= :userId AND ur.enable = true
     """)
     Set<String> findEnabledRolesByUserId(@Param("userId") Long userId);
 
-    Page<UserEntity> findAll(Pageable pageable);
+    Page<UserEntity> findAllByIsAdminNull(Pageable pageable);
 
 
 }

@@ -14,7 +14,7 @@ public interface RolRepository extends JpaRepository<RolEntity, Long> {
 
     @Query("""
         SELECT r FROM RolEntity r 
-        JOIN UserRolEntity ur ON ur.user.id = r.id
+        JOIN UserRolEntity ur ON ur.role.id = r.id
         WHERE ur.user.id= :userId AND ur.enable = true
     """)
     Optional<List<RolEntity>> findRolesByUserId(@Param("userId") Long userId);

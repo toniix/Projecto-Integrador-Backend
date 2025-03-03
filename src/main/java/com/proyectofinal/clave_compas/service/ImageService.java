@@ -25,7 +25,7 @@ public class ImageService {
     /*public ImageServices(@Autowired ImageRepository imageRepository) {
         this.imageRepository = imageRepository;
     }*/
-    @Transactional(transactionManager = "txManagerClavecompas", propagation = Propagation.REQUIRED, rollbackFor = {Exception.class, SQLException.class})
+    @Transactional(transactionManager = "txManagerClavecompas", propagation = Propagation.REQUIRES_NEW, rollbackFor = {Exception.class, SQLException.class})
     public void saveImages(Integer idProduct, List<String> imageUrls) {
         if (imageUrls == null || imageUrls.isEmpty()) {
             return;
