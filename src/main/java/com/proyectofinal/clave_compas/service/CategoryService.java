@@ -22,7 +22,7 @@ public class CategoryService {
             throw new ResourceNotFoundException("No Category found");
         }
         List<CategoryEntity> subCategories = allCategories.stream().filter(categoryEntity -> categoryEntity.getParentCategory()!=null).toList();
-        return CategoryMapper.INSTANCE.odontologosToOdontologosDTO(subCategories);
+        return CategoryMapper.INSTANCE.toDTOs(subCategories);
     }
 
     public CategoryEntity saveCategory(CategoryDTO categoria) {

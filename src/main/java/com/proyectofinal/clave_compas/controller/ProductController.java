@@ -2,15 +2,12 @@ package com.proyectofinal.clave_compas.controller;
 
 
 
-import com.proyectofinal.clave_compas.bd.clavecompas.entities.ProductEntity;
-import com.proyectofinal.clave_compas.bd.clavecompas.repositories.ProductRepository;
 import com.proyectofinal.clave_compas.controller.responses.GlobalResponse;
-import com.proyectofinal.clave_compas.service.ImageServices;
-import com.proyectofinal.clave_compas.service.ProductServices;
+import com.proyectofinal.clave_compas.service.ProductService;
 import com.proyectofinal.clave_compas.service.dto.ProductDTO;
 
+import com.proyectofinal.clave_compas.util.Constants;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -21,13 +18,13 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ProductController {
 
-    private final ProductServices productServices;
+    private final ProductService productServices;
 
     @GetMapping
     public ResponseEntity<GlobalResponse> findAll(@RequestParam int page, @RequestParam int pageSize) {
         GlobalResponse gres = GlobalResponse.builder()
                 .statusCode(HttpStatus.OK.value())
-                .message("Operación exitosa")
+                .message(Constants.MENSAJE_EXITO)
                 .response(productServices.getPaginateProducts(page, pageSize))
                 .build();
         return ResponseEntity.ok(gres);
@@ -37,7 +34,7 @@ public class ProductController {
     private ResponseEntity<GlobalResponse> saveProduct(@Validated @RequestBody ProductDTO productDto)  {
         GlobalResponse gres = GlobalResponse.builder()
                 .statusCode(HttpStatus.OK.value())
-                .message("Operación exitosa")
+                .message(Constants.MENSAJE_EXITO)
                 .response(productServices.saveProduct(productDto))
                 .build();
 
@@ -49,7 +46,7 @@ public class ProductController {
     public ResponseEntity<GlobalResponse> getProductById(@PathVariable Integer idProduct) {
         GlobalResponse gres = GlobalResponse.builder()
                 .statusCode(HttpStatus.OK.value())
-                .message("Operación exitosa")
+                .message(Constants.MENSAJE_EXITO)
                 .response(productServices.getProductById(idProduct))
                 .build();
         return ResponseEntity.ok(gres);
@@ -61,7 +58,7 @@ public class ProductController {
         productServices.deleteProductById(idProduct);
         GlobalResponse gres = GlobalResponse.builder()
                 .statusCode(HttpStatus.OK.value())
-                .message("Operación exitosa")
+                .message(Constants.MENSAJE_EXITO)
                 .build();
         return ResponseEntity.ok(gres);
 
@@ -72,7 +69,7 @@ public class ProductController {
         productServices.putCategoryToProduct(productoId, categoriaId);
         GlobalResponse gres = GlobalResponse.builder()
                 .statusCode(HttpStatus.ACCEPTED.value())
-                .message("Operación exitosa")
+                .message(Constants.MENSAJE_EXITO)
                 .response(productServices.getProductById(productoId))
                 .build();
         return ResponseEntity.ok(gres);

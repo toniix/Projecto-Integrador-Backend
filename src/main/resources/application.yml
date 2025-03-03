@@ -1,6 +1,13 @@
 
 
 spring:
+  jpa:
+    properties:
+      hibernate:
+        ddl-auto: update
+        cache:
+          use_second_level_cache: false
+          use_query_cache: false
   application:
     name: clavecompas
   datasource:
@@ -32,6 +39,8 @@ springdoc:
     path: /swagger-ui.html
     url: /v3/api-docs
   paths-to-match: /**
+  server:
+    url: https://clavecompas-production.up.railway.app
 
 
 
