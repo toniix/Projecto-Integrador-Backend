@@ -5,6 +5,7 @@ import com.proyectofinal.clave_compas.controller.responses.CategoryResponse;
 import com.proyectofinal.clave_compas.controller.responses.GlobalResponse;
 import com.proyectofinal.clave_compas.service.CategoryService;
 import com.proyectofinal.clave_compas.service.dto.CategoryDTO;
+import com.proyectofinal.clave_compas.util.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class CategoryController {
         CategoryResponse categoryResponse = new CategoryResponse(categories);
         GlobalResponse gres = GlobalResponse.builder()
                 .statusCode(HttpStatus.OK.value())
-                .message("Operación exitosa")
+                .message(Constants.MENSAJE_EXITO)
                 .response(categoryResponse)
                 .build();
 
@@ -36,7 +37,7 @@ public class CategoryController {
         categoryService.saveCategory(category);
         GlobalResponse gres = GlobalResponse.builder()
                 .statusCode(HttpStatus.CREATED.value())
-                .message("Operación exitosa")
+                .message(Constants.MENSAJE_EXITO)
                 .build();
         return ResponseEntity.ok(gres);
     }
