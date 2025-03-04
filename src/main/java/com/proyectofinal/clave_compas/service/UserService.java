@@ -67,7 +67,7 @@ public class UserService {
         userEntity.setRoles(roles);
         UserDetailIsImpl user= new UserDetailIsImpl(userEntity);
         String token=jwtService.getToken(user);
-        return new LoginResponse(UserMapper.INSTANCE.toDTO(userEntity), token);
+        return new LoginResponse(UserMapper.INSTANCE.toDTO(userEntity), roles ,token);
     }
 
     public Page<UserDTO> getPaginateUsers(int page, int size ) {
