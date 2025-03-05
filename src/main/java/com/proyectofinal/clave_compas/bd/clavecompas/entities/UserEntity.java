@@ -41,8 +41,8 @@ public class UserEntity {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "localidad")
-    private String localidad;
+    @Column(name = "locality")
+    private String locality;
 
     @Column(name = "is_admin")
     private Boolean isAdmin = false;

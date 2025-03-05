@@ -33,7 +33,7 @@ public record UserDTO(
         @Size(min = 8, message = "La contraseña debe tener al menos 8 caracteres")
         String password,
 
-        String localidad
+        String locality
 
 ) {
 }
