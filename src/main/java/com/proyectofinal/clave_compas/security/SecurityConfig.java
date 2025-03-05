@@ -52,8 +52,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/**","/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                         .requestMatchers("/users/login","/users/register").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/categories").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/products").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/categories","/clavecompas/categories/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/products","/clavecompas/products/**").permitAll()
                         .requestMatchers("/products").hasAuthority("ADMIN")
                         .requestMatchers("/users").hasAuthority("ADMIN")
                         .anyRequest().authenticated())

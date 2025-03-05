@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +32,7 @@ public class UserRolService {
     }
     
     @Transactional(transactionManager = "txManagerClavecompas", propagation = Propagation.REQUIRED, rollbackFor = {Exception.class,SQLException.class})
-    public UserRolResponse asignRoles(UserRolRequest userRolRequest) {
+    public boolean asignRoles(UserRolRequest userRolRequest) {
         UserEntity user = userService.findById(userRolRequest.getIdUser());
         Set<UserRolEntity> userRolEntities = userRolRepository.findByUserId(user.getId());
         Set<Long> rolIds = userRolRequest.getIdsRol();
@@ -51,8 +52,8 @@ public class UserRolService {
                 userRolRepository.saveAll(userRolsToAdd);
 
             }else {
-                Map<Long, UserRolEntity> actualAsigners = new HashMap<>();
-                userRolEntities.stream().forEach(ure->actualAsigners.put(ure.getRole().getId(),ure));
+                Map<Long, UserRolEntity> actualAsigners = userRolEntities.stream()
+                        .collect(Collectors.toMap(ure -> ure.getRole().getId(), ure -> ure));
 
                 for(Long rolId : rolIds){
                     if(actualAsigners.containsKey(rolId)){
@@ -82,10 +83,15 @@ public class UserRolService {
         }else {
             if (!userRolEntities.isEmpty()) {
                 userRolEntities.forEach(ure->ure.setEnable(false));
+                userRolRepository.saveAll(userRolEntities);
             }
         }
 
-        return null;
+        return true;
     }
+
+
+
+
 
 }
