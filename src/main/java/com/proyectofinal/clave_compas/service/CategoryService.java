@@ -4,7 +4,7 @@ import com.proyectofinal.clave_compas.bd.clavecompas.entities.CategoryEntity;
 import com.proyectofinal.clave_compas.bd.clavecompas.repositories.CategoryRepository;
 import com.proyectofinal.clave_compas.exception.ResourceNotFoundException;
 import com.proyectofinal.clave_compas.mappers.CategoryMapper;
-import com.proyectofinal.clave_compas.service.dto.CategoryDTO;
+import com.proyectofinal.clave_compas.dto.CategoryDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

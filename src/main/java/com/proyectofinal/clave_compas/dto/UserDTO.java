@@ -1,4 +1,4 @@
-package com.proyectofinal.clave_compas.service.dto;
+package com.proyectofinal.clave_compas.dto;
 
 import jakarta.validation.constraints.*;
 
@@ -31,7 +31,9 @@ public record UserDTO(
 
         @NotBlank(message = "La contraseña es obligatoria")
         @Size(min = 8, message = "La contraseña debe tener al menos 8 caracteres")
-        String password
+        String password,
+
+        String localidad
 
 ) {
 }

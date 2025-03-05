@@ -10,8 +10,8 @@ import com.proyectofinal.clave_compas.exception.UserAlreadyOnRepositoryException
 import com.proyectofinal.clave_compas.mappers.UserMapper;
 import com.proyectofinal.clave_compas.security.jwt.JwtService;
 import com.proyectofinal.clave_compas.security.userdetail.UserDetailIsImpl;
-import com.proyectofinal.clave_compas.service.dto.LoginDTO;
-import com.proyectofinal.clave_compas.service.dto.UserDTO;
+import com.proyectofinal.clave_compas.dto.LoginDTO;
+import com.proyectofinal.clave_compas.dto.UserDTO;
 import com.proyectofinal.clave_compas.util.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
