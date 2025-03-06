@@ -9,6 +9,7 @@ import com.proyectofinal.clave_compas.service.dto.RolDTO;
 import com.proyectofinal.clave_compas.service.dto.UserDTO;
 import com.proyectofinal.clave_compas.util.Constants;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,11 +19,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "users")
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
     private final RolService rolService;
+
+    public UserController(@Lazy UserService userService, RolService rolService) {
+        this.userService = userService;
+        this.rolService = rolService;
+    }
 
     @PostMapping(value = "/register")
     public ResponseEntity<GlobalResponse> saveUser(@Validated @RequestBody UserDTO userDTO) {
