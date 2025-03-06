@@ -7,6 +7,7 @@ import java.util.Set;
 public record LoginResponse(
         UserDTO user,
         Set<String> roles,
-        String token
+        String token,
+        String refresh_token
 ) {
 }
