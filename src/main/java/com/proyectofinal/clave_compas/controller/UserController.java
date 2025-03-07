@@ -22,16 +22,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "users")
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
     private final RolService rolService;
-
-    public UserController(@Lazy UserService userService, RolService rolService) {
-        this.userService = userService;
-        this.rolService = rolService;
-    }
 
     @PostMapping(value = "/register")
     public ResponseEntity<GlobalResponse> saveUser(@Validated @RequestBody UserDTO userDTO) {

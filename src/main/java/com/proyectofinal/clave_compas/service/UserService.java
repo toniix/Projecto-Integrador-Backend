@@ -32,7 +32,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
@@ -41,15 +41,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
-
-    public UserService(UserRepository userRepository, @Lazy UserRolService userRolService, RolService rolService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtService jwtService) {
-        this.userRepository = userRepository;
-        this.userRolService = userRolService;
-        this.rolService = rolService;
-        this.passwordEncoder = passwordEncoder;
-        this.authenticationManager = authenticationManager;
-        this.jwtService = jwtService;
-    }
 
     @Transactional(transactionManager = "txManagerClavecompas", propagation = Propagation.REQUIRED, rollbackFor = {Exception.class, SQLException.class})
     public UserDTO saveUser(UserDTO userDTO) throws UserAlreadyOnRepositoryException {

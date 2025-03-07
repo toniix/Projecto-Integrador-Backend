@@ -20,18 +20,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class UserRolService {
 
     private final UserRolRepository userRolRepository;
     private final UserRepository userRepository;
     private final RolService rolService;
-
-    public UserRolService(UserRolRepository userRolRepository, @Lazy UserService userService, RolService rolService) {
-        this.userRolRepository = userRolRepository;
-        this.userService = userService;
-        this.rolService = rolService;
-    }
 
     @Transactional(transactionManager = "txManagerClavecompas", propagation = Propagation.REQUIRED, rollbackFor = {Exception.class, SQLException.class})
     public void save(UserRolEntity userRolEntity) {
