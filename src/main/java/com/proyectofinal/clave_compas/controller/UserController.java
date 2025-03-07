@@ -2,12 +2,15 @@ package com.proyectofinal.clave_compas.controller;
 
 import com.proyectofinal.clave_compas.controller.responses.GlobalResponse;
 import com.proyectofinal.clave_compas.controller.responses.UserRolResponse;
+import com.proyectofinal.clave_compas.dto.TokenRefreshDTO;
 import com.proyectofinal.clave_compas.service.RolService;
 import com.proyectofinal.clave_compas.service.UserService;
-import com.proyectofinal.clave_compas.service.dto.LoginDTO;
-import com.proyectofinal.clave_compas.service.dto.RolDTO;
-import com.proyectofinal.clave_compas.service.dto.UserDTO;
+import com.proyectofinal.clave_compas.dto.LoginDTO;
+import com.proyectofinal.clave_compas.dto.RolDTO;
+import com.proyectofinal.clave_compas.dto.UserDTO;
 import com.proyectofinal.clave_compas.util.Constants;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
@@ -19,16 +22,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "users")
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
     private final RolService rolService;
-
-    public UserController(@Lazy UserService userService, RolService rolService) {
-        this.userService = userService;
-        this.rolService = rolService;
-    }
 
     @PostMapping(value = "/register")
     public ResponseEntity<GlobalResponse> saveUser(@Validated @RequestBody UserDTO userDTO) {
@@ -46,6 +44,16 @@ public class UserController {
                 .statusCode(HttpStatus.OK.value())
                 .message(Constants.MENSAJE_EXITO)
                 .response(userService.loginUser(loginDTO))
+                .build();
+        return ResponseEntity.ok(gres);
+    }
+
+    @PostMapping(value = "/auth/refresh")
+    public ResponseEntity<GlobalResponse> refreshToken(@Validated @RequestBody TokenRefreshDTO tokenRefreshDTO) {
+        GlobalResponse gres = GlobalResponse.builder()
+                .statusCode(HttpStatus.OK.value())
+                .message(Constants.MENSAJE_EXITO)
+                .response(userService.refreshToken(tokenRefreshDTO.refreshToken()))
                 .build();
         return ResponseEntity.ok(gres);
     }

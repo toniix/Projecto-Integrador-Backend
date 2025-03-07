@@ -2,7 +2,7 @@ package com.proyectofinal.clave_compas.mappers;
 
 import com.proyectofinal.clave_compas.bd.clavecompas.entities.ImageEntity;
 import com.proyectofinal.clave_compas.bd.clavecompas.entities.ProductEntity;
-import com.proyectofinal.clave_compas.service.dto.ProductDTO;
+import com.proyectofinal.clave_compas.dto.ProductDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;

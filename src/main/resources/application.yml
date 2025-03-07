@@ -44,6 +44,12 @@ springdoc:
   server:
     url: https://clavecompas-production.up.railway.app
 
+jwt:
+  secret: ${JWT_SECRET_KEY}
+  accesstoken:
+    expiration: ${JWT_ACCESS_TOKEN_EXPIRATION}
+  refreshtoken:
+    expiration: ${JWT_REFRESH_TOKEN_EXPIRATION}
 
 # Configuración para Cloudinary
 cloudinary:
