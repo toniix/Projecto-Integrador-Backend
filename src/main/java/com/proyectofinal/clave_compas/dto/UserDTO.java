@@ -1,4 +1,4 @@
-package com.proyectofinal.clave_compas.service.dto;
+package com.proyectofinal.clave_compas.dto;
 
 import jakarta.validation.constraints.*;
 
@@ -14,7 +14,7 @@ public record UserDTO(
         String lastName,
 
         @NotBlank(message = "El documento es obligatorio")
-        @Pattern(regexp = "\\d{8}", message = "El documento debe tener 8 dígitos")
+        @Pattern(regexp = "\\d{8,}", message = "El documento debe tener al menos 8 dígitos")
         String document,
 
         @NotBlank(message = "El teléfono es obligatorio")
@@ -31,7 +31,9 @@ public record UserDTO(
 
         @NotBlank(message = "La contraseña es obligatoria")
         @Size(min = 8, message = "La contraseña debe tener al menos 8 caracteres")
-        String password
+        String password,
+
+        String locality
 
 ) {
 }

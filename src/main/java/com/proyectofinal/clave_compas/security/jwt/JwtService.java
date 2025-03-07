@@ -1,10 +1,13 @@
 package com.proyectofinal.clave_compas.security.jwt;
 
+import com.proyectofinal.clave_compas.security.userdetail.CusUserDetailsService;
+import com.proyectofinal.clave_compas.util.Constants;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -18,9 +21,11 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class JwtService {
-    private static final String SECRET_KEY="586E3272357538782F413F4428472B4B6250655368566B59703373367639792438782F413F4428472B4B6250655368566B597033733676397924";
 
+    private final CusUserDetailsService cusUserDetailsService;
+    private final JwtConstants jwtConstants;
     public String getToken(UserDetails user) {
         return getToken(new HashMap<>(), user);
     }
@@ -34,14 +39,35 @@ public class JwtService {
                         .collect(Collectors.toList()))
                 .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
-                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                .setExpiration(new Date(System.currentTimeMillis() + jwtConstants.getAccessTokenExpiration()))
+                .signWith(getKey() ,SignatureAlgorithm.HS512)
                 .compact();
     }
 
+    public String generateRefreshToken(String username) {
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + jwtConstants.getRefreshTokenExpiration())) // 7 días
+                .signWith(getKey(), SignatureAlgorithm.HS512)
+                .compact();
+    }
+
+    public String generateNewAccessToken(String refreshToken) {
+        if (isTokenExpired(refreshToken)) {
+            throw new RuntimeException("Refresh Token expirado");
+        }
+        String username = getUsernameFromToken(refreshToken);
+
+        // Cargar detalles del usuario desde el servicio de detalles de usuario
+        UserDetails user = cusUserDetailsService.loadUserByUsername(username);
+
+        // Generar un nuevo Access Token
+        return getToken(new HashMap<>(), user);
+    }
 
     private Key getKey() {
-        byte[] keyBytes= Decoders.BASE64.decode(SECRET_KEY);
+        byte[] keyBytes= Decoders.BASE64.decode(jwtConstants.getSecretKey());
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
@@ -75,7 +101,7 @@ public class JwtService {
         return getClaim(token, Claims::getExpiration);
     }
 
-    private boolean isTokenExpired(String token)
+    public boolean isTokenExpired(String token)
     {
         return getExpiration(token).before(new Date());
     }
@@ -83,5 +109,9 @@ public class JwtService {
     public List<String> getRolesFromToken(String token) {
         Claims claims = getAllClaims(token);
         return claims.get("roles", List.class);
+    }
+
+    public boolean isRefreshTokenValid(String refreshToken, String username) {
+        return getUsernameFromToken(refreshToken).equals(username) && !isTokenExpired(refreshToken);
     }
 }

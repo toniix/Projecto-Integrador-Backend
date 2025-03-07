@@ -1,7 +1,7 @@
 package com.proyectofinal.clave_compas.controller.responses;
 
-import com.proyectofinal.clave_compas.service.dto.RolDTO;
-import com.proyectofinal.clave_compas.service.dto.UserDTO;
+import com.proyectofinal.clave_compas.dto.RolDTO;
+import com.proyectofinal.clave_compas.dto.UserDTO;
 
 import java.util.List;
 

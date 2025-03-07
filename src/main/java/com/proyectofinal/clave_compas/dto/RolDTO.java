@@ -1,4 +1,4 @@
-package com.proyectofinal.clave_compas.service.dto;
+package com.proyectofinal.clave_compas.dto;
 
 public record RolDTO (
         Long id,

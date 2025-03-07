@@ -1,7 +1,7 @@
 package com.proyectofinal.clave_compas.mappers;
 
 import com.proyectofinal.clave_compas.bd.clavecompas.entities.CategoryEntity;
-import com.proyectofinal.clave_compas.service.dto.CategoryDTO;
+import com.proyectofinal.clave_compas.dto.CategoryDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

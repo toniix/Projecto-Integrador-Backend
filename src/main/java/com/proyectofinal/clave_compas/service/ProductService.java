@@ -12,7 +12,7 @@ import com.proyectofinal.clave_compas.exception.NotValidCategory;
 import com.proyectofinal.clave_compas.exception.ProductAlreadyOnRepositoryException;
 import com.proyectofinal.clave_compas.exception.ResourceNotFoundException;
 import com.proyectofinal.clave_compas.mappers.ProductMapper;
-import com.proyectofinal.clave_compas.service.dto.ProductDTO;
+import com.proyectofinal.clave_compas.dto.ProductDTO;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
