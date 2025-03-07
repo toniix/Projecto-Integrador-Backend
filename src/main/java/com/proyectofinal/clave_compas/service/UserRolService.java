@@ -7,6 +7,7 @@ import com.proyectofinal.clave_compas.bd.clavecompas.repositories.UserRolReposit
 import com.proyectofinal.clave_compas.controller.requests.UserRolRequest;
 import com.proyectofinal.clave_compas.controller.responses.UserRolResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 //@RequiredArgsConstructor
+@DependsOn("userService")
 public class UserRolService {
 
     private final UserRolRepository userRolRepository;
@@ -37,7 +39,7 @@ public class UserRolService {
     public UserRolEntity save(UserRolEntity userRolEntity) {
         return userRolRepository.save(userRolEntity);
     }
-    
+
     @Transactional(transactionManager = "txManagerClavecompas", propagation = Propagation.REQUIRED, rollbackFor = {Exception.class,SQLException.class})
     public boolean asignRoles(UserRolRequest userRolRequest) {
         UserEntity user = userService.findById(userRolRequest.getIdUser());
