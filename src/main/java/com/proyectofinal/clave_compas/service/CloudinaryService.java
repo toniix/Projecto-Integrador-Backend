@@ -3,65 +3,63 @@ package com.proyectofinal.clave_compas.service;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class CloudinaryService {
 
-    private final Cloudinary cloudinary;
 
     @Autowired
-    public CloudinaryService(Cloudinary cloudinary) {
-        this.cloudinary = cloudinary;
-    }
+    private Cloudinary cloudinary;
 
-    /**
-     * Uploads an image to Cloudinary and returns the URL
-     *
-     * @param file the image file to upload
-     * @return Map containing upload results including the secure URL
-     * @throws IOException if upload fails
-     */
-    public Map<String, String> uploadImage(MultipartFile file) throws IOException {
+
+    private String uploadPreset = "clave_compas";
+
+    public Map<String, String> uploadFile(MultipartFile file) {
         try {
-            Map<String, Object> options = new HashMap<>();
-            options.put("resource_type", "auto");
-            options.put("folder", "instruments"); // Organize uploads in folders
+            // Generar un nombre único para el archivo
+            String publicId = UUID.randomUUID().toString();
 
-            Map<String, Object> uploadResult = cloudinary.uploader().upload(file.getBytes(), options);
+            // Subir el archivo a Cloudinary usando upload_preset
+            Map<?, ?> uploadResult = cloudinary.uploader().upload(
+                    file.getBytes(),
+                    ObjectUtils.asMap(
+                            "public_id", publicId,
+                            "upload_preset", uploadPreset
+                    )
+            );
 
-            Map<String, String> result = new HashMap<>();
-            result.put("publicId", (String) uploadResult.get("public_id"));
-            result.put("url", (String) uploadResult.get("url"));
-            result.put("secureUrl", (String) uploadResult.get("secure_url"));
-
-            return result;
+            // Extraer y devolver la información relevante de la respuesta
+            return Map.of(
+                    "publicId", (String) uploadResult.get("public_id"),
+                    "url", (String) uploadResult.get("url"),
+                    "secureUrl", (String) uploadResult.get("secure_url"),
+                    "format", (String) uploadResult.get("format"),
+                    "width", String.valueOf(uploadResult.get("width")),
+                    "height", String.valueOf(uploadResult.get("height"))
+            );
         } catch (IOException e) {
-            throw new IOException("Error uploading image to Cloudinary", e);
+            throw new RuntimeException("Error al subir archivo a Cloudinary", e);
         }
     }
 
-    /**
-     * Deletes an image from Cloudinary by its public ID
-     *
-     * @param publicId the public ID of the image to delete
-     * @return true if deletion was successful
-     */
-    public boolean deleteImage(String publicId) {
-        try {
-            Map<String, Object> result = cloudinary.uploader().destroy(
+    public String deleteFile(String publicId) {
+       try {
+            Map<?, ?> result = cloudinary.uploader().destroy(
                     publicId,
                     ObjectUtils.emptyMap()
             );
 
-            return "ok".equals(result.get("result"));
+            return (String) result.get("result");
         } catch (IOException e) {
-            return false;
+            throw new RuntimeException("Error al eliminar archivo de Cloudinary", e);
         }
     }
 }
