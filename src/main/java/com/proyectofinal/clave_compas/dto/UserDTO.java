@@ -14,7 +14,7 @@ public record UserDTO(
         String lastName,
 
         @NotBlank(message = "El documento es obligatorio")
-        @Pattern(regexp = "\\d{8}", message = "El documento debe tener 8 dígitos")
+        @Pattern(regexp = "\\d{8,}", message = "El documento debe tener al menos 8 dígitos")
         String document,
 
         @NotBlank(message = "El teléfono es obligatorio")
