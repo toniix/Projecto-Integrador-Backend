@@ -1,6 +1,8 @@
 
 
 spring:
+  main:
+    allow-circular-references: true
   jpa:
     properties:
       hibernate:
@@ -49,10 +51,15 @@ jwt:
   refreshtoken:
     expiration: ${JWT_REFRESH_TOKEN_EXPIRATION}
 
-
-
-
-
+# Configuración para Cloudinary
+cloudinary:
+  cloud-name: ${CLOUDINARY_CLOUD_NAME}
+  api-key: ${CLOUDINARY_API_KEY}
+  api-secret: ${CLOUDINARY_API_SECRET}
+  upload-folder: clavecompas
+  upload-allowed-formats: jpg,jpeg,png,gif
+  upload-max-image-size: 5242880
+  #notification-url: ${CLOUDINARY_NOTIFICATION_URL:}
 
 
 

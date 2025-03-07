@@ -15,6 +15,7 @@ import com.proyectofinal.clave_compas.dto.LoginDTO;
 import com.proyectofinal.clave_compas.dto.UserDTO;
 import com.proyectofinal.clave_compas.util.Constants;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
