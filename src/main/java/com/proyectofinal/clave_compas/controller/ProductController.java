@@ -1,7 +1,5 @@
 package com.proyectofinal.clave_compas.controller;
 
-
-
 import com.proyectofinal.clave_compas.controller.responses.GlobalResponse;
 import com.proyectofinal.clave_compas.service.ProductService;
 import com.proyectofinal.clave_compas.dto.ProductDTO;
