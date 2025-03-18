@@ -1,8 +1,6 @@
 package com.proyectofinal.clave_compas.mappers;
-import com.proyectofinal.clave_compas.bd.clavecompas.entities.ProductEntity;
 import com.proyectofinal.clave_compas.bd.clavecompas.entities.UserEntity;
-import com.proyectofinal.clave_compas.service.dto.ProductDTO;
-import com.proyectofinal.clave_compas.service.dto.UserDTO;
+import com.proyectofinal.clave_compas.dto.UserDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;

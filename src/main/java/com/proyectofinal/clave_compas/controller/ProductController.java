@@ -1,10 +1,8 @@
 package com.proyectofinal.clave_compas.controller;
 
-
-
 import com.proyectofinal.clave_compas.controller.responses.GlobalResponse;
 import com.proyectofinal.clave_compas.service.ProductService;
-import com.proyectofinal.clave_compas.service.dto.ProductDTO;
+import com.proyectofinal.clave_compas.dto.ProductDTO;
 
 import com.proyectofinal.clave_compas.util.Constants;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "products")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
 public class ProductController {
 
     private final ProductService productServices;
@@ -54,6 +51,17 @@ public class ProductController {
 
     }
 
+    @GetMapping("/search/category/{idCategory}")
+    public ResponseEntity<GlobalResponse> getProductByCategory(@PathVariable Integer idCategory) {
+        GlobalResponse gres = GlobalResponse.builder()
+                .statusCode(HttpStatus.OK.value())
+                .message(Constants.MENSAJE_EXITO)
+                .response(productServices.getProductByCategory(idCategory))
+                .build();
+        return ResponseEntity.ok(gres);
+
+    }
+
     @DeleteMapping("/{idProduct}")
     public ResponseEntity<GlobalResponse> deleteProductById(@PathVariable Integer idProduct) {
         productServices.deleteProductById(idProduct);
@@ -75,4 +83,6 @@ public class ProductController {
                 .build();
         return ResponseEntity.ok(gres);
     }
+
+
 }

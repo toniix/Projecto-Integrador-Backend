@@ -1,11 +1,7 @@
 package com.proyectofinal.clave_compas.mappers;
 
-import com.proyectofinal.clave_compas.bd.clavecompas.entities.CategoryEntity;
 import com.proyectofinal.clave_compas.bd.clavecompas.entities.RolEntity;
-import com.proyectofinal.clave_compas.bd.clavecompas.entities.UserEntity;
-import com.proyectofinal.clave_compas.service.dto.CategoryDTO;
-import com.proyectofinal.clave_compas.service.dto.RolDTO;
-import com.proyectofinal.clave_compas.service.dto.UserDTO;
+import com.proyectofinal.clave_compas.dto.RolDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

@@ -12,7 +12,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/cloudinary")
-@CrossOrigin(origins = "http://localhost:5173")
 public class CloudinaryController {
 
     @Autowired
@@ -30,6 +29,7 @@ public class CloudinaryController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", e.getMessage()));
+
         }
     }
 
@@ -41,6 +41,10 @@ public class CloudinaryController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", e.getMessage()));
+
+
+
+
         }
     }
 }

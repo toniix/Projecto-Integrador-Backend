@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Set;
+
 @Service
 @RequiredArgsConstructor
 public class CusUserDetailsService implements UserDetailsService {
@@ -19,6 +21,8 @@ public class CusUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity userEntity = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
+        Set<String> roles = userRepository.findEnabledRolesByUserId(userEntity.getId());
+        userEntity.setRoles(roles);
         return new UserDetailIsImpl(userEntity);
     }
 }

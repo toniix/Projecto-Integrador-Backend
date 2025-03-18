@@ -5,13 +5,14 @@ import com.proyectofinal.clave_compas.bd.clavecompas.entities.UserEntity;
 import com.proyectofinal.clave_compas.bd.clavecompas.entities.UserRolEntity;
 import com.proyectofinal.clave_compas.bd.clavecompas.repositories.UserRepository;
 import com.proyectofinal.clave_compas.controller.responses.LoginResponse;
+import com.proyectofinal.clave_compas.dto.TokenRefreshDTO;
 import com.proyectofinal.clave_compas.exception.ResourceNotFoundException;
 import com.proyectofinal.clave_compas.exception.UserAlreadyOnRepositoryException;
 import com.proyectofinal.clave_compas.mappers.UserMapper;
 import com.proyectofinal.clave_compas.security.jwt.JwtService;
 import com.proyectofinal.clave_compas.security.userdetail.UserDetailIsImpl;
-import com.proyectofinal.clave_compas.service.dto.LoginDTO;
-import com.proyectofinal.clave_compas.service.dto.UserDTO;
+import com.proyectofinal.clave_compas.dto.LoginDTO;
+import com.proyectofinal.clave_compas.dto.UserDTO;
 import com.proyectofinal.clave_compas.util.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
@@ -25,12 +26,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.naming.AuthenticationException;
 import java.sql.SQLException;
 import java.util.Optional;
 import java.util.Set;
 
 @Service
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
@@ -39,15 +41,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
-
-    public UserService(UserRepository userRepository, @Lazy UserRolService userRolService, RolService rolService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtService jwtService) {
-        this.userRepository = userRepository;
-        this.userRolService = userRolService;
-        this.rolService = rolService;
-        this.passwordEncoder = passwordEncoder;
-        this.authenticationManager = authenticationManager;
-        this.jwtService = jwtService;
-    }
 
     @Transactional(transactionManager = "txManagerClavecompas", propagation = Propagation.REQUIRED, rollbackFor = {Exception.class, SQLException.class})
     public UserDTO saveUser(UserDTO userDTO) throws UserAlreadyOnRepositoryException {
@@ -77,7 +70,11 @@ public class UserService {
         userEntity.setRoles(roles);
         UserDetailIsImpl user= new UserDetailIsImpl(userEntity);
         String token=jwtService.getToken(user);
-        return new LoginResponse(UserMapper.INSTANCE.toDTO(userEntity), roles ,token);
+        String refreshToken = jwtService.generateRefreshToken(user.getUsername());
+        return new LoginResponse(UserMapper.INSTANCE.toDTO(userEntity), roles ,token,refreshToken);
+    }
+    public TokenRefreshDTO refreshToken(String token) throws RuntimeException {
+        return new TokenRefreshDTO(jwtService.generateNewAccessToken(token));
     }
 
     public Page<UserDTO> getPaginateUsers(int page, int size ) {
@@ -95,4 +92,5 @@ public class UserService {
         return userRepository.findById(id)
                 .orElseThrow(()->new ResourceNotFoundException("El usurio con ID " + id + " no existe."));
     }
+
 }

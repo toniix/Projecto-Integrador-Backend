@@ -20,9 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
 import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -48,13 +46,17 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.headers(headers -> headers.frameOptions(FrameOptionsConfig::deny))
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/**","/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
-                        .requestMatchers("/users/login","/users/register").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/categories","/clavecompas/categories/**").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/products","/clavecompas/products/**").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
+                        .requestMatchers("/users/login","/users/register","/users/auth/refresh").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/categories","/categories/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/products","/products/search/category/**","/products/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/reservations/availability").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/reservations/product/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/search/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/reservations").authenticated()
                         .requestMatchers("/products").hasAuthority("ADMIN")
                         .requestMatchers("/users").hasAuthority("ADMIN")
                         .anyRequest().authenticated())

@@ -1,5 +1,3 @@
-
-
 spring:
   main:
     allow-circular-references: true
@@ -13,12 +11,12 @@ spring:
   application:
     name: clavecompas
   datasource:
-    jdbcUrl : ${DATASOURCE_URL} #jdbc:postgresql://localhost:5432/clavecompas
+    jdbcUrl : ${DATASOURCE_URL} #
     username: ${DATASOURCE_USER}
     password: ${DATASOURCE_PASS}
     driver-class-name: org.postgresql.Driver
     hikari:
-      maximum-pool-size: 10
+      schema: clavecompas
   web:
     resources:
       static-locations: file:src/main/resources/static/
@@ -28,10 +26,10 @@ spring:
       enabled:  true
       max-request-size: 20MB
 server:
-  address: 0.0.0.0
-  port: ${SERVICE_PORT}
+  port: 8080
   servlet:
     context-path: /clavecompas
+  address: 0.0.0.0
 
 springdoc:
   api-docs:
@@ -45,13 +43,24 @@ springdoc:
   server:
     url: https://clavecompas-production.up.railway.app
 
+jwt:
+  secret: ${JWT_SECRET}
+  access:
+    token:
+      expiration: 864000000  
+  refresh:
+    token:
+      expiration: 2592000000  
 
 # Configuración para Cloudinary
 cloudinary:
   cloud-name: ${CLOUDINARY_CLOUD_NAME}
   api-key: ${CLOUDINARY_API_KEY}
   api-secret: ${CLOUDINARY_API_SECRET}
-
+  upload-folder: clavecompas
+  upload-allowed-formats: jpg,jpeg,png,gif
+  upload-max-image-size: 5242880
+  #notification-url: ${CLOUDINARY_NOTIFICATION_URL:}
 
 
 

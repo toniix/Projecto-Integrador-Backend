@@ -4,7 +4,7 @@ package com.proyectofinal.clave_compas.controller;
 import com.proyectofinal.clave_compas.controller.responses.CategoryResponse;
 import com.proyectofinal.clave_compas.controller.responses.GlobalResponse;
 import com.proyectofinal.clave_compas.service.CategoryService;
-import com.proyectofinal.clave_compas.service.dto.CategoryDTO;
+import com.proyectofinal.clave_compas.dto.CategoryDTO;
 import com.proyectofinal.clave_compas.util.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,6 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value ="categories")
-@CrossOrigin(origins = "http://localhost:5173")
 public class CategoryController {
     private final CategoryService categoryService;
 

@@ -8,11 +8,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 @Service
 public class CloudinaryService {
+
 
     @Autowired
     private Cloudinary cloudinary;
@@ -49,7 +51,7 @@ public class CloudinaryService {
     }
 
     public String deleteFile(String publicId) {
-        try {
+       try {
             Map<?, ?> result = cloudinary.uploader().destroy(
                     publicId,
                     ObjectUtils.emptyMap()

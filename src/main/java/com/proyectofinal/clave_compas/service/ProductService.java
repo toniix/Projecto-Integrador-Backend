@@ -12,7 +12,7 @@ import com.proyectofinal.clave_compas.exception.NotValidCategory;
 import com.proyectofinal.clave_compas.exception.ProductAlreadyOnRepositoryException;
 import com.proyectofinal.clave_compas.exception.ResourceNotFoundException;
 import com.proyectofinal.clave_compas.mappers.ProductMapper;
-import com.proyectofinal.clave_compas.service.dto.ProductDTO;
+import com.proyectofinal.clave_compas.dto.ProductDTO;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
@@ -23,7 +23,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -90,6 +92,11 @@ public class ProductService {
                 .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
         producto.setCategory(categoria);
         productRepository.save(producto);
+    }
+
+    public List<ProductDTO> getProductByCategory(Integer categoryId) {
+        List<ProductEntity> productEntities = productRepository.findByCategory(categoryId);
+        return productEntities.stream().map(ProductMapper.INSTANCE::toDTO).collect(Collectors.toList());
     }
 
 }
