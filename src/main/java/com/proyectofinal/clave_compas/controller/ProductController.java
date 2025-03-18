@@ -51,6 +51,17 @@ public class ProductController {
 
     }
 
+    @GetMapping("/search/category/{idCategory}")
+    public ResponseEntity<GlobalResponse> getProductByCategory(@PathVariable Integer idCategory) {
+        GlobalResponse gres = GlobalResponse.builder()
+                .statusCode(HttpStatus.OK.value())
+                .message(Constants.MENSAJE_EXITO)
+                .response(productServices.getProductByCategory(idCategory))
+                .build();
+        return ResponseEntity.ok(gres);
+
+    }
+
     @DeleteMapping("/{idProduct}")
     public ResponseEntity<GlobalResponse> deleteProductById(@PathVariable Integer idProduct) {
         productServices.deleteProductById(idProduct);
