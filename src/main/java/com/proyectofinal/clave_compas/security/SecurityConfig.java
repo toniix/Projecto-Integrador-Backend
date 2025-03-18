@@ -20,9 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
 import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -54,7 +52,11 @@ public class SecurityConfig {
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                         .requestMatchers("/users/login","/users/register","/users/auth/refresh").permitAll()
                         .requestMatchers(HttpMethod.GET,"/categories","/categories/**").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/products","/products/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/products","/products/search/category/**","/products/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/reservations/availability").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/reservations/product/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/reservations").authenticated()
+                        .requestMatchers(HttpMethod.GET,"/search/**").permitAll()
                         .requestMatchers("/products").hasAuthority("ADMIN")
                         .requestMatchers("/users").hasAuthority("ADMIN")
                         .anyRequest().authenticated())

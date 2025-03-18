@@ -1,7 +1,5 @@
 package com.proyectofinal.clave_compas.controller;
 
-
-
 import com.proyectofinal.clave_compas.controller.responses.GlobalResponse;
 import com.proyectofinal.clave_compas.service.ProductService;
 import com.proyectofinal.clave_compas.dto.ProductDTO;
@@ -48,6 +46,17 @@ public class ProductController {
                 .statusCode(HttpStatus.OK.value())
                 .message(Constants.MENSAJE_EXITO)
                 .response(productServices.getProductById(idProduct))
+                .build();
+        return ResponseEntity.ok(gres);
+
+    }
+
+    @GetMapping("/search/category/{idCategory}")
+    public ResponseEntity<GlobalResponse> getProductByCategory(@PathVariable Integer idCategory) {
+        GlobalResponse gres = GlobalResponse.builder()
+                .statusCode(HttpStatus.OK.value())
+                .message(Constants.MENSAJE_EXITO)
+                .response(productServices.getProductByCategory(idCategory))
                 .build();
         return ResponseEntity.ok(gres);
 
