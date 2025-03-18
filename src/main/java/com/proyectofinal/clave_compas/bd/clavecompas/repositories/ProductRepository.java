@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,4 +72,43 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
 
     @Query("SELECT p FROM ProductEntity p WHERE p.category.idCategory = :categoryId")
     List<ProductEntity> findByCategory(@Param("categoryId") Integer categoryId);
+
+
+    @Query(value =
+            "SELECT p.* FROM clavecompas.product p WHERE " +
+                    "(:keyword IS NULL OR " +
+                    "   LOWER(p.name::text) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+                    "   LOWER(p.description::text) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+                    "   LOWER(p.brand::text) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+                    "   LOWER(p.model::text) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
+                    "AND (:categoryId IS NULL OR p.id_category = :categoryId) " +
+                    "AND (:minPrice IS NULL OR p.price >= :minPrice) " +
+                    "AND (:maxPrice IS NULL OR p.price <= :maxPrice) " +
+                    "AND (p.available = true) " +
+                    "AND (p.stock >= :quantity) " +
+                    "AND NOT EXISTS (" +
+                    "   SELECT 1 FROM clavecompas.reservation r " +
+                    "   WHERE r.id_product = p.id_product " +
+                    "   AND r.status != 'CANCELLED' " +
+                    "   AND r.enddate >= :startDate " +
+                    "   AND r.startdate <= :endDate " +
+                    "   AND (" +
+                    "       SELECT COALESCE(SUM(r2.quantity), 0) " +
+                    "       FROM clavecompas.reservation r2 " +
+                    "       WHERE r2.id_product = p.id_product " +
+                    "       AND r2.status != 'CANCELLED' " +
+                    "       AND r2.enddate >= :startDate " +
+                    "       AND r2.startdate <= :endDate" +
+                    "   ) + :quantity > p.stock" +
+                    ")",
+            nativeQuery = true)
+    Page<ProductEntity> advancedSearchWithAvailability(
+            @Param("keyword") String keyword,
+            @Param("categoryId") Integer categoryId,
+            @Param("minPrice") BigDecimal minPrice,
+            @Param("maxPrice") BigDecimal maxPrice,
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate,
+            @Param("quantity") Integer quantity,
+            Pageable pageable);
 }
