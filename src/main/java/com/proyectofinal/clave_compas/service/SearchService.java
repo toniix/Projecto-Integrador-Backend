@@ -34,42 +34,36 @@ public class SearchService {
                 request.getSize(),
                 sort);
 
-        // Realizar la búsqueda inicial
-        Page<ProductEntity> productsPage = productRepository.advancedSearch(
-                request.getKeyword(),
-                request.getCategoryId(),
-                request.getMinPrice(),
-                request.getMaxPrice(),
-                pageable);
+        // Si hay fechas y cantidad, usar la búsqueda con disponibilidad
+        if (request.getStartDate() != null && request.getEndDate() != null && request.getQuantity() != null) {
+            Page<ProductEntity> productsPage = productRepository.advancedSearchWithAvailability(
+                    request.getKeyword(),
+                    request.getCategoryId(),
+                    request.getMinPrice(),
+                    request.getMaxPrice(),
+                    request.getStartDate(),
+                    request.getEndDate(),
+                    request.getQuantity(),
+                    pageable);
 
-        // Si no hay fechas, simplemente mapear los resultados
-        if (request.getStartDate() == null || request.getEndDate() == null || request.getQuantity() == null) {
+            // Mapear directamente a DTO con disponibilidad = true ya que la consulta SQL ya filtró
+            return productsPage.map(product -> {
+                ProductSearchResultDTO dto = mapToDTO(product);
+                dto.setIsAvailable(true); // Todos los productos devueltos están disponibles
+                return dto;
+            });
+        } else {
+            // Si no hay fechas, usar la búsqueda estándar
+            Page<ProductEntity> productsPage = productRepository.advancedSearch(
+                    request.getKeyword(),
+                    request.getCategoryId(),
+                    request.getMinPrice(),
+                    request.getMaxPrice(),
+                    pageable);
+
+            // Simplemente mapear los resultados sin verificar disponibilidad
             return productsPage.map(this::mapToDTO);
         }
-
-        // Filtrar por disponibilidad de fechas
-        List<ProductSearchResultDTO> filteredList = productsPage.getContent().stream()
-                .map(product -> {
-                    ProductSearchResultDTO dto = mapToDTO(product);
-                    // Verificar disponibilidad
-                    boolean isAvailable = reservationService.isProductAvailable(
-                            product.getIdProduct(),
-                            request.getStartDate(),
-                            request.getEndDate(),
-                            request.getQuantity());
-
-                    dto.setIsAvailable(isAvailable);
-                    return dto;
-                })
-                .filter(ProductSearchResultDTO::getIsAvailable)
-                .collect(Collectors.toList());
-
-        // Crear un nuevo Page con los resultados filtrados
-        return new PageImpl<>(
-                filteredList,
-                pageable,
-                filteredList.size() // Nota: esto no es preciso para el total count, pero es lo mejor que podemos hacer
-        );
     }
 
     private ProductSearchResultDTO mapToDTO(ProductEntity product) {
