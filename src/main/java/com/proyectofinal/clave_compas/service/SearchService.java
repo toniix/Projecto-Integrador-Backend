@@ -64,6 +64,7 @@ public class SearchService {
             // Simplemente mapear los resultados sin verificar disponibilidad
             return productsPage.map(this::mapToDTO);
         }
+
     }
 
     private ProductSearchResultDTO mapToDTO(ProductEntity product) {

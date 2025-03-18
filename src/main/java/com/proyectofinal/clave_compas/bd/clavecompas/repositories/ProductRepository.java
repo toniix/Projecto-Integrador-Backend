@@ -109,4 +109,5 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
             @Param("endDate") LocalDate endDate,
             @Param("quantity") Integer quantity,
             Pageable pageable);
+
 }
