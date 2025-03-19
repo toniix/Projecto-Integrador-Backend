@@ -27,6 +27,7 @@ public class CategoryService {
 
     public CategoryEntity saveCategory(CategoryDTO categoria) {
         CategoryEntity category = CategoryMapper.INSTANCE.toCategoryEntity(categoria);
+        category.setParentCategory(category);
         categoryRepository.save(category);
         return category;
     }

@@ -15,10 +15,14 @@ public interface CategoryMapper {
 
     @Mapping(source = "idCategory", target = "idCategory")
     @Mapping(source = "name", target = "name")
+    @Mapping(source = "description", target = "description")
+    @Mapping(source = "imageUrl" ,target = "imageUrl")
     CategoryDTO toCategoryDTO(CategoryEntity categoryEntity);
 
     @Mapping(source = "idCategory", target = "idCategory")
     @Mapping(source = "name", target = "name")
+    @Mapping(source = "description", target = "description")
+    @Mapping(source = "imageUrl" ,target = "imageUrl")
     @Mapping(target = "parentCategory", ignore = true)
     CategoryEntity toCategoryEntity(CategoryDTO categoryDTO);
 
