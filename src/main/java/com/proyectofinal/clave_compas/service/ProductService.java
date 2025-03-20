@@ -23,7 +23,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -69,6 +71,11 @@ public class ProductService {
         ProductEntity productEntity = productRepository.findById(idProduct)
                 .orElseThrow(()->new ResourceNotFoundException("El producto con ID " + idProduct + " no existe."));
         return ProductMapper.INSTANCE.toDTO(productEntity);
+    }
+
+    public List<ProductDTO> getProductByCategory(Integer categoryId) {
+        List<ProductEntity> productEntities = productRepository.findByCategory(categoryId);
+        return productEntities.stream().map(ProductMapper.INSTANCE::toDTO).collect(Collectors.toList());
     }
 
     public void deleteProductById(Integer idProduct) {
