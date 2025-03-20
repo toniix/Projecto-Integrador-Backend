@@ -71,6 +71,6 @@ cloudinary:
   upload-max-image-size: 5242880
   #notification-url: ${CLOUDINARY_NOTIFICATION_URL:}
 
-#app:
-#  frontend:
-#    url: http://localhost:5173
+app:
+  frontend:
+    url: ${FRONTED_URL}
