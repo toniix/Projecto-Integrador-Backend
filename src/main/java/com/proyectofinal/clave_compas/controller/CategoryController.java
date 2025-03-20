@@ -1,6 +1,7 @@
 package com.proyectofinal.clave_compas.controller;
 
 
+import com.proyectofinal.clave_compas.bd.clavecompas.repositories.CategoryRepository;
 import com.proyectofinal.clave_compas.controller.responses.CategoryResponse;
 import com.proyectofinal.clave_compas.controller.responses.GlobalResponse;
 import com.proyectofinal.clave_compas.service.CategoryService;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -18,6 +20,7 @@ import java.util.List;
 @RequestMapping(value ="categories")
 public class CategoryController {
     private final CategoryService categoryService;
+    private final CategoryRepository categoryRepository;
 
     @GetMapping
     public ResponseEntity<GlobalResponse> findAll() {
@@ -41,4 +44,18 @@ public class CategoryController {
                 .build();
         return ResponseEntity.ok(gres);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<GlobalResponse> deleteCategory( @PathVariable Integer id) {
+        if (!categoryRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Categoría no encontrada");
+        }
+        categoryRepository.deleteById(id);
+        GlobalResponse gres = GlobalResponse.builder()
+                .statusCode(HttpStatus.CREATED.value())
+                .message(Constants.MENSAJE_EXITO)
+                .build();
+        return ResponseEntity.ok(gres);
+    }
+
 }

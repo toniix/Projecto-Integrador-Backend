@@ -21,6 +21,12 @@ public class CategoryEntity {
     @Column(nullable = false, unique = true, length = 50)
     private String name;
 
+    @Column( columnDefinition = "TEXT")
+    private String description;
+
+    @Column
+    private String imageUrl;
+
     @ManyToOne
     @JoinColumn(name = "id_parent_category")
     private CategoryEntity parentCategory;
