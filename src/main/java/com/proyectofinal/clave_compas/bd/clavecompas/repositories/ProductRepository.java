@@ -19,6 +19,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
     public Optional<ProductEntity> findByName(String name);
     public Optional<ProductEntity> findById(Integer id);
 
+
     // Búsqueda básica por palabra clave (nombre, descripción, marca o modelo)
     @Query("SELECT p FROM ProductEntity p WHERE " +
             "LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
@@ -72,6 +73,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
     @Query("SELECT p FROM ProductEntity p WHERE p.category.idCategory = :categoryId")
     List<ProductEntity> findByCategory(@Param("categoryId") Integer categoryId);
 
+
     @Query(value =
             "SELECT p.* FROM clavecompas.product p WHERE " +
                     "(:keyword IS NULL OR " +
@@ -109,5 +111,4 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
             @Param("endDate") LocalDate endDate,
             @Param("quantity") Integer quantity,
             Pageable pageable);
-
 }

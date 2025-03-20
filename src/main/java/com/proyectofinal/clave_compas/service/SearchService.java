@@ -63,42 +63,43 @@ public class SearchService {
 
             // Simplemente mapear los resultados sin verificar disponibilidad
             return productsPage.map(this::mapToDTO);
+
+
+        }
+    }
+
+        private ProductSearchResultDTO mapToDTO (ProductEntity product){
+            return ProductSearchResultDTO.builder()
+                    .idProduct(product.getIdProduct())
+                    .name(product.getName())
+                    .brand(product.getBrand())
+                    .model(product.getModel())
+                    .price(product.getPrice())
+                    .categoryName(product.getCategory().getName())
+                    .mainImageUrl(product.getImages() != null && !product.getImages().isEmpty() ?
+                            product.getImages().get(0).getImageUrl() : null)
+                    .isAvailable(product.getAvailable())
+                    .availableStock(product.getStock())
+                    .build();
         }
 
-    }
+        public List<String> getAutocompleteSuggestions (String query){
+            if (query == null || query.trim().isEmpty()) {
+                return new ArrayList<>();
+            }
 
-    private ProductSearchResultDTO mapToDTO(ProductEntity product) {
-        return ProductSearchResultDTO.builder()
-                .idProduct(product.getIdProduct())
-                .name(product.getName())
-                .brand(product.getBrand())
-                .model(product.getModel())
-                .price(product.getPrice())
-                .categoryName(product.getCategory().getName())
-                .mainImageUrl(product.getImages() != null && !product.getImages().isEmpty() ?
-                        product.getImages().get(0).getImageUrl() : null)
-                .isAvailable(product.getAvailable())
-                .availableStock(product.getStock())
-                .build();
-    }
+            String prefix = query.trim();
 
-    public List<String> getAutocompleteSuggestions(String query) {
-        if (query == null || query.trim().isEmpty()) {
-            return new ArrayList<>();
+            // Combinar diferentes tipos de sugerencias
+            List<String> nameSuggestions = productRepository.findSuggestionsByPrefix(prefix);
+            List<String> brandSuggestions = productRepository.findBrandSuggestionsByPrefix(prefix);
+            List<String> modelSuggestions = productRepository.findModelSuggestionsByPrefix(prefix);
+
+            // Combinar las sugerencias y limitar el total
+            return Stream.of(nameSuggestions, brandSuggestions, modelSuggestions)
+                    .flatMap(List::stream)
+                    .distinct()
+                    .limit(10)
+                    .collect(Collectors.toList());
         }
-
-        String prefix = query.trim();
-
-        // Combinar diferentes tipos de sugerencias
-        List<String> nameSuggestions = productRepository.findSuggestionsByPrefix(prefix);
-        List<String> brandSuggestions = productRepository.findBrandSuggestionsByPrefix(prefix);
-        List<String> modelSuggestions = productRepository.findModelSuggestionsByPrefix(prefix);
-
-        // Combinar las sugerencias y limitar el total
-        return Stream.of(nameSuggestions, brandSuggestions, modelSuggestions)
-                .flatMap(List::stream)
-                .distinct()
-                .limit(10)
-                .collect(Collectors.toList());
     }
-}

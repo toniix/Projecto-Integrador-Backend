@@ -73,6 +73,11 @@ public class ProductService {
         return ProductMapper.INSTANCE.toDTO(productEntity);
     }
 
+    public List<ProductDTO> getProductByCategory(Integer categoryId) {
+        List<ProductEntity> productEntities = productRepository.findByCategory(categoryId);
+        return productEntities.stream().map(ProductMapper.INSTANCE::toDTO).collect(Collectors.toList());
+    }
+
     public void deleteProductById(Integer idProduct) {
         if (!productRepository.existsById(idProduct)) {
             throw new ResourceNotFoundException("El producto con ID " + idProduct + " no existe.");
@@ -92,11 +97,6 @@ public class ProductService {
                 .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
         producto.setCategory(categoria);
         productRepository.save(producto);
-    }
-
-    public List<ProductDTO> getProductByCategory(Integer categoryId) {
-        List<ProductEntity> productEntities = productRepository.findByCategory(categoryId);
-        return productEntities.stream().map(ProductMapper.INSTANCE::toDTO).collect(Collectors.toList());
     }
 
 }

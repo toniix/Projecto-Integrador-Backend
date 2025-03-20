@@ -26,7 +26,7 @@ spring:
       enabled:  true
       max-request-size: 20MB
 server:
-  port: 8080
+  port: ${SERVICE_PORT}
   servlet:
     context-path: /clavecompas
   address: 0.0.0.0
@@ -49,7 +49,6 @@ jwt:
     expiration: ${JWT_ACCESS_TOKEN_EXPIRATION}
   refreshtoken:
     expiration: ${JWT_REFRESH_TOKEN_EXPIRATION}
-
 
 # Configuración para Cloudinary
 cloudinary:
