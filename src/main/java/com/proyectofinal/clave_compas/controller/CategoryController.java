@@ -58,4 +58,14 @@ public class CategoryController {
         return ResponseEntity.ok(gres);
     }
 
+    @GetMapping(value = "admin")
+    public ResponseEntity<GlobalResponse> findAll(@RequestParam int page, @RequestParam int pageSize) {
+        GlobalResponse gres = GlobalResponse.builder()
+                .statusCode(HttpStatus.OK.value())
+                .message(Constants.MENSAJE_EXITO)
+                .response(categoryService.getPaginateCategories(page, pageSize))
+                .build();
+        return ResponseEntity.ok(gres);
+    }
+
 }
