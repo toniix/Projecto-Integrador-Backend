@@ -73,4 +73,5 @@ cloudinary:
 
 app:
   frontend:
-    url: http://localhost:5173
+    url: ${FRONTED_URL}
+
