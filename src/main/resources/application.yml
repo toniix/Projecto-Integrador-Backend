@@ -74,3 +74,4 @@ cloudinary:
 app:
   frontend:
     url: ${FRONTED_URL}
+
