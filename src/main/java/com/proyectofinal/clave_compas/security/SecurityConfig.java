@@ -50,11 +50,12 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
-                        .requestMatchers("/users/login","/users/register","/users/auth/refresh", "/users/resend-confirmation").permitAll()
+                        .requestMatchers("/users/login", "/users/register","/users/auth/refresh", "/users/resend-confirmation").permitAll()
                         .requestMatchers(HttpMethod.GET,"/categories","/categories/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/products","/products/search/category/**","/products/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/reservations/availability").permitAll()
                         .requestMatchers(HttpMethod.GET,"/reservations/product/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/reviews", "/reviews/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/reservations").authenticated()
                         .requestMatchers(HttpMethod.GET,"/search/**").permitAll()
                         .requestMatchers("/products").hasAuthority("ADMIN")
