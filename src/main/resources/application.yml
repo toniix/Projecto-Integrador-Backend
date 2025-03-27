@@ -11,17 +11,17 @@ spring:
   application:
     name: clavecompas
   datasource:
-    jdbcUrl : jdbc:postgresql://localhost:5432/clavecompas
-    username: compas
-    password: clave
+    jdbcUrl : ${DATASOURCE_URL}
+    username: ${DATASOURCE_USER}
+    password: ${DATASOURCE_PASS}
     driver-class-name: org.postgresql.Driver
     hikari:
       schema: clavecompas
   mail:
     host: smtp.gmail.com
     port: 587
-    username: clavecompas@gmail.com
-    password: wljn qbno zqqo qvpk
+    username: ${MAIL_USER}
+    password: ${MAIL_PASS}
     properties:
       mail:
         smtp:
@@ -37,7 +37,7 @@ spring:
       enabled:  true
       max-request-size: 20MB
 server:
-  port: 8080
+  port: ${SERVICE_PORT}
   servlet:
     context-path: /clavecompas
   address: 0.0.0.0
@@ -55,24 +55,23 @@ springdoc:
     url: https://clavecompas-production.up.railway.app
 
 jwt:
-  secret: cJYXubdDGdxWUUALFXUNiZeNAuG3+ufM/QhNAk1DE2U=
-  access:
-    token:
-      expiration: 864000000
-  refresh:
-    token:
-      expiration: 2592000000
+  secret: ${JWT_SECRET_KEY}
+  accesstoken:
+    expiration: ${JWT_ACCESS_TOKEN_EXPIRATION}
+  refreshtoken:
+    expiration: ${JWT_REFRESH_TOKEN_EXPIRATION}
 
 # Configuración para Cloudinary
 cloudinary:
-  cloud-name: dlj6zjtpp
-  api-key: 698114318994344
-  api-secret: QFy9IL3wcGVusDiAo6HSgnrf8PM
+  cloud-name: ${CLOUDINARY_CLOUD_NAME}
+  api-key: ${CLOUDINARY_API_KEY}
+  api-secret: ${CLOUDINARY_API_SECRET}
   upload-folder: clavecompas
   upload-allowed-formats: jpg,jpeg,png,gif
   upload-max-image-size: 5242880
   #notification-url: ${CLOUDINARY_NOTIFICATION_URL:}
 
 app:
- frontend:
-   url: http://localhost:5173
+  frontend:
+    url: ${FRONTED_URL}
+
