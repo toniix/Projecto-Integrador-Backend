@@ -46,14 +46,10 @@ public class ReviewController {
     @PostMapping
     public ResponseEntity<GlobalResponse> saveReview(@AuthenticationPrincipal UserDetailIsImpl userDetails,
             @RequestBody ReviewDTO reviewDTO) {
-        // Set the user ID from authenticated user
         reviewDTO.setIdUser(userDetails.getUserId());
         reviewDTO.setUserName(userDetails.getFirstName());
 
-        // Convert ReviewDTO to ReviewEntity
         ReviewEntity reviewEntity = reviewMapper.toEntity(reviewDTO);
-
-        // The service layer will handle the validation for completed reservations
         ReviewEntity savedReview = reviewService.saveReview(reviewEntity);
 
         GlobalResponse gres = GlobalResponse.builder()
@@ -74,13 +70,9 @@ public class ReviewController {
     @PutMapping
     public ResponseEntity<GlobalResponse> updateReview(@AuthenticationPrincipal UserDetailIsImpl userDetails,
             @RequestBody ReviewDTO reviewDTO) {
-        // Set the user ID from authenticated user
         reviewDTO.setIdUser(userDetails.getUserId());
 
-        // Convert ReviewDTO to ReviewEntity
         ReviewEntity reviewEntity = reviewMapper.toEntity(reviewDTO);
-
-        // Update the review
         ReviewEntity updatedReview = reviewService.updateReview(reviewEntity);
 
         GlobalResponse gres = GlobalResponse.builder()
@@ -138,7 +130,6 @@ public class ReviewController {
 
         Page<ReviewEntity> reviews = reviewService.findReviewsByProduct(productId, pageable);
         
-        // Convert entities to DTOs
         Page<ReviewDTO> reviewDTOs = reviews.map(reviewMapper::toDTO);
 
         GlobalResponse gres = GlobalResponse.builder()
@@ -166,7 +157,6 @@ public class ReviewController {
 
         Page<ReviewEntity> reviews = reviewService.findReviewsByUser(userId, pageable);
         
-        // Convert entities to DTOs
         Page<ReviewDTO> reviewDTOs = reviews.map(reviewMapper::toDTO);
 
         GlobalResponse gres = GlobalResponse.builder()

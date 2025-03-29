@@ -21,6 +21,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -33,22 +34,20 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173")); // Specific origin instead of wildcard
-        configuration.setAllowedMethods(List.of(
+        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList(
             HttpMethod.OPTIONS.name(),
             HttpMethod.GET.name(),
             HttpMethod.POST.name(), 
             HttpMethod.PUT.name(),
             HttpMethod.DELETE.name()
         ));
-        configuration.setAllowedHeaders(List.of(
+        configuration.setAllowedHeaders(Arrays.asList(
             "Authorization", 
             "Content-Type",
             "X-Requested-With", 
             "Access-Control-Allow-Origin"
         ));
-        configuration.setAllowCredentials(true);  // Add this line
-        configuration.setExposedHeaders(List.of("Access-Control-Allow-Origin"));
         
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
@@ -73,13 +72,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,"/api/favorites").authenticated()
                         .requestMatchers(HttpMethod.DELETE,"/api/favorites/**").authenticated()
                         .requestMatchers(HttpMethod.GET,"/reviews", "/reviews/**", "/reviews/product/**", "/reviews/stats/**").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/clavecompas/reviews", "/clavecompas/reviews/**", "/clavecompas/reviews/product/**", "/clavecompas/reviews/stats/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/reviews/user/*/product/*").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/clavecompas/reviews/user/*/product/*").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/clavecompas/reviews").permitAll()
-                        .requestMatchers(HttpMethod.PUT,"/reviews/**").permitAll()
-                        .requestMatchers(HttpMethod.PUT,"/clavecompas/reviews/**").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/reviews").permitAll()
+                        .requestMatchers(HttpMethod.PUT,"/reviews/**").authenticated()
+                        .requestMatchers(HttpMethod.POST,"/reviews").authenticated()
                         .requestMatchers(HttpMethod.GET,"/search/**").permitAll()
                         .requestMatchers("/products").hasAuthority("ADMIN")
                         .requestMatchers("/users").hasAuthority("ADMIN")
