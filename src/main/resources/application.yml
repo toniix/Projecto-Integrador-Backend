@@ -11,12 +11,23 @@ spring:
   application:
     name: clavecompas
   datasource:
-    jdbcUrl : ${DATASOURCE_URL} #
+    jdbcUrl : ${DATASOURCE_URL}
     username: ${DATASOURCE_USER}
     password: ${DATASOURCE_PASS}
     driver-class-name: org.postgresql.Driver
     hikari:
       schema: clavecompas
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USER}
+    password: ${MAIL_PASS}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
   web:
     resources:
       static-locations: file:src/main/resources/static/
@@ -45,10 +56,12 @@ springdoc:
 
 jwt:
   secret: ${JWT_SECRET_KEY}
-  accesstoken:
-    expiration: ${JWT_ACCESS_TOKEN_EXPIRATION}
-  refreshtoken:
-    expiration: ${JWT_REFRESH_TOKEN_EXPIRATION}
+  access:
+    token:
+      expiration: ${JWT_ACCESS_TOKEN_EXPIRATION}
+  refresh:
+    token:
+      expiration: ${JWT_REFRESH_TOKEN_EXPIRATION}
 
 # Configuración para Cloudinary
 cloudinary:
@@ -60,5 +73,7 @@ cloudinary:
   upload-max-image-size: 5242880
   #notification-url: ${CLOUDINARY_NOTIFICATION_URL:}
 
-
+app:
+  frontend:
+    url: ${FRONTED_URL}
 

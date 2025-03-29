@@ -20,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import java.util.List;
 import java.util.Arrays;
 
 @Configuration
@@ -34,13 +35,22 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList(HttpMethod.OPTIONS.name(), HttpMethod.GET.name(),
-                        HttpMethod.POST.name(), HttpMethod.PUT.name(), HttpMethod.DELETE.name()));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type",
-                        "X-Requested-With", "Access-Control-Allow-Origin"));
+        configuration.setAllowedMethods(Arrays.asList(
+            HttpMethod.OPTIONS.name(),
+            HttpMethod.GET.name(),
+            HttpMethod.POST.name(), 
+            HttpMethod.PUT.name(),
+            HttpMethod.DELETE.name()
+        ));
+        configuration.setAllowedHeaders(Arrays.asList(
+            "Authorization", 
+            "Content-Type",
+            "X-Requested-With", 
+            "Access-Control-Allow-Origin"
+        ));
+        
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
-
         return source;
     }
     @Bean
@@ -50,15 +60,22 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
-                        .requestMatchers("/users/login","/users/register","/users/auth/refresh").permitAll()
+                        .requestMatchers("/users/login","/users/register","/users/auth/refresh", "/users/resend-confirmation").permitAll()
                         .requestMatchers(HttpMethod.GET,"/categories","/categories/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/clavecompas/categories").permitAll() //
+                        .requestMatchers(HttpMethod.DELETE, "/clavecompas/categories").permitAll() // BOrrar
                         .requestMatchers(HttpMethod.GET,"/products","/products/search/category/**","/products/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/reservations/availability").permitAll()
                         .requestMatchers(HttpMethod.GET,"/reservations/product/**").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/reservations").authenticated()
+                        .requestMatchers(HttpMethod.POST,"/clavecompas/reservations").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/reservations/user").authenticated()
                         .requestMatchers(HttpMethod.GET,"/api/favorites/**").authenticated()
                         .requestMatchers(HttpMethod.POST,"/api/favorites").authenticated()
                         .requestMatchers(HttpMethod.DELETE,"/api/favorites/**").authenticated()
+                        .requestMatchers(HttpMethod.GET,"/reviews", "/reviews/**", "/reviews/product/**", "/reviews/stats/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/reviews/user/*/product/*").permitAll()
+                        .requestMatchers(HttpMethod.PUT,"/reviews/**").authenticated()
+                        .requestMatchers(HttpMethod.POST,"/reviews").authenticated()
                         .requestMatchers(HttpMethod.GET,"/search/**").permitAll()
                         .requestMatchers("/products").hasAuthority("ADMIN")
                         .requestMatchers("/users").hasAuthority("ADMIN")
