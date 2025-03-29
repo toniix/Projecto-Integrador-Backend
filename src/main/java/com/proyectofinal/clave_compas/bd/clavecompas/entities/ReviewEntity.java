@@ -21,6 +21,9 @@ public class ReviewEntity {
     @JoinColumn(name = "id_user", nullable = false)
     private UserEntity user;
 
+    @Column(name = "user_name", nullable = false)
+    private String userName;
+
     @ManyToOne
     @JoinColumn(name = "id_product", nullable = false)
     private ProductEntity product;

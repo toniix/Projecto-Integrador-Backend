@@ -32,6 +32,10 @@ public class ReservationDTO {
     @NotNull(message = "Quantity cannot be null")
     @Positive(message = "Quantity must be a positive number")
     private Integer quantity;
+
+    @NotNull(message = "Product ID cannot be null")
+    @Positive(message = "Product ID must be a positive number")
+    private Integer productId;
     
     @NotNull(message = "Status cannot be null")
     private ReservationStatus status;

@@ -40,4 +40,7 @@ public class ReservationEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ReservationStatus status;
+
+    @Column(name = "product_id", nullable = false)
+    private Integer productId;
 }

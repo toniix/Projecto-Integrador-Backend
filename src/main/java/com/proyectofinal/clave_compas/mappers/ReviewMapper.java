@@ -12,9 +12,11 @@ public interface ReviewMapper {
 
     @Mapping(source = "idUser", target = "user.id")
     @Mapping(source = "idProduct", target = "product.idProduct")
+    @Mapping(source = "userName", target = "userName")
     ReviewEntity toEntity(ReviewDTO reviewDTO);
 
     @Mapping(source = "user.id", target = "idUser")
     @Mapping(source = "product.idProduct", target = "idProduct")
+    @Mapping(source = "userName", target = "userName")
     ReviewDTO toDTO(ReviewEntity reviewEntity);
 }

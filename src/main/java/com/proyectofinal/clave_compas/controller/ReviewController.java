@@ -48,6 +48,7 @@ public class ReviewController {
             @RequestBody ReviewDTO reviewDTO) {
         // Set the user ID from authenticated user
         reviewDTO.setIdUser(userDetails.getUserId());
+        reviewDTO.setUserName(userDetails.getFirstName());
 
         // Convert ReviewDTO to ReviewEntity
         ReviewEntity reviewEntity = reviewMapper.toEntity(reviewDTO);
@@ -188,14 +189,12 @@ public class ReviewController {
 
         Optional<ReviewEntity> reviewOpt = reviewService.findByUserIdAndProductId(userId, productId);
 
-        if (reviewOpt.isEmpty()) {
-            throw new ResourceNotFoundException("Review not found for this user and product");
-        }
+        ReviewEntity review = reviewOpt.orElse(null);
 
         GlobalResponse gres = GlobalResponse.builder()
                 .statusCode(HttpStatus.OK.value())
                 .message(Constants.MENSAJE_EXITO)
-                .response(reviewOpt.get())
+                .response(review)
                 .build();
         return ResponseEntity.ok(gres);
     }

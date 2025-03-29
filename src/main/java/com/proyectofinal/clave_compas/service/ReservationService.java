@@ -4,12 +4,17 @@ import com.proyectofinal.clave_compas.bd.clavecompas.entities.ReservationEntity;
 import com.proyectofinal.clave_compas.util.ReservationStatus;
 import com.proyectofinal.clave_compas.bd.clavecompas.repositories.ReservationRepository;
 import com.proyectofinal.clave_compas.bd.clavecompas.entities.ProductEntity;
+import com.proyectofinal.clave_compas.bd.clavecompas.entities.UserEntity;
 import com.proyectofinal.clave_compas.bd.clavecompas.repositories.ProductRepository;
+import com.proyectofinal.clave_compas.bd.clavecompas.repositories.UserRepository;
+import com.proyectofinal.clave_compas.dto.UserDTO;
+import com.proyectofinal.clave_compas.mappers.UserMapper;
 import com.proyectofinal.clave_compas.dto.ReservationDTO;
 import com.proyectofinal.clave_compas.exception.ResourceNotFoundException;
 import com.proyectofinal.clave_compas.exception.AvailabilityException;
 import com.proyectofinal.clave_compas.mappers.ReservationMapper;
 import com.proyectofinal.clave_compas.exception.BadRequestException;
+import com.proyectofinal.clave_compas.service.EmailService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +30,8 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final ProductRepository productRepository;
+    private final UserRepository userRepository;
+    private final EmailService emailService;
 
     @Transactional(readOnly = true)
     public boolean isProductAvailable(Integer idProduct, LocalDate startDate, LocalDate endDate, Integer quantity) {
@@ -58,7 +65,18 @@ public class ReservationService {
         }
 
         ReservationEntity reservation = ReservationMapper.INSTANCE.toEntity(reservationDTO);
-        return reservationRepository.save(reservation);
+        ReservationEntity savedReservation = reservationRepository.save(reservation);
+        ProductEntity product = productRepository.findById(reservationDTO.getIdProduct())
+            .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+        reservation.setProduct(product);
+        
+        // Send confirmation email
+        UserEntity user = userRepository.findById(reservationDTO.getIdUser())
+            .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        UserDTO userDTO = UserMapper.INSTANCE.toDTO(user);
+        emailService.sendReservationConfirmationEmail(userDTO, savedReservation);
+        
+        return savedReservation;
     }
 
     @Transactional(readOnly = true)

@@ -22,6 +22,9 @@ public class ReviewDTO {
     @NotNull(message = "Product ID cannot be null")
     private Integer idProduct;
 
+    @NotNull(message = "User name cannot be null")
+    private String userName;
+
     @NotNull(message = "Rating cannot be null")
     @Min(value = 1, message = "Rating must be at least 1")
     @Max(value = 5, message = "Rating must be at most 5")

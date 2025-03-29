@@ -32,7 +32,12 @@ public class UserDetailIsImpl implements UserDetails {
         return user.getEmail();
     }
 
+    public String getFirstName() {
+        return user.getFirstName();
+    }
+    
     public Long getUserId() {
         return user.getId();
     }
 }
+
