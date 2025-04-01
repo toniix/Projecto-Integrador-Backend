@@ -43,4 +43,5 @@ public class ReservationEntity {
 
     @Column(name = "product_id", nullable = false)
     private Integer productId;
+
 }

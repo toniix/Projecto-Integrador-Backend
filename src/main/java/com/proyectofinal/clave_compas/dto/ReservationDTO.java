@@ -39,4 +39,8 @@ public class ReservationDTO {
     
     @NotNull(message = "Status cannot be null")
     private ReservationStatus status;
+
+    private String productName;
+    private String productImageUrl;
+
 }
