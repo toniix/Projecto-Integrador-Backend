@@ -34,6 +34,7 @@ public class ReservationService {
     private final EmailService emailService;
     private final ReservationMapper reservationMapper;
 
+
     @Transactional(readOnly = true)
     public boolean isProductAvailable(Integer idProduct, LocalDate startDate, LocalDate endDate, Integer quantity) {
         ProductEntity product = productRepository.findById(idProduct)
@@ -191,7 +192,6 @@ public class ReservationService {
             })
             .collect(Collectors.toList());
     }
-
     @Transactional(readOnly = true)
     public List<ReservationDTO> getReservationsByUser(Long userId) {
         List<ReservationEntity> reservations = reservationRepository.findByUserId(userId);
@@ -200,4 +200,5 @@ public class ReservationService {
                 .map(reservationMapper::toDTO) // Mapear cada entidad a DTO
                 .collect(Collectors.toList());
     }
+
 }

@@ -35,7 +35,9 @@ public interface ReservationMapper {
         if (dto.getEndDate() != null) entity.setEndDate(dto.getEndDate());
         if (dto.getQuantity() != null) entity.setQuantity(dto.getQuantity());
         if (dto.getStatus() != null) entity.setStatus(dto.getStatus());
-        //if (dto.getProductId()!= null) entity.setProductId(dto.getProductId());
+
+        if (dto.getProductId()!= null) entity.setProductId(dto.getProductId());
+
     }
 
     @Named("integerToLong")

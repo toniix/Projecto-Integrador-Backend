@@ -169,6 +169,7 @@ public class ReservationController {
         return ResponseEntity.ok(response);
     }
 
+
     @Operation(summary = "Get details reservations by user",
                description = "Returns list of reservations with details for the authenticated user")
     @GetMapping("/user")
@@ -185,4 +186,5 @@ public class ReservationController {
 
         return ResponseEntity.ok(response);
     }
+
 }

@@ -42,4 +42,5 @@ public class ReservationDTO {
 
     private String productName;
     private String productImageUrl;
+
 }
