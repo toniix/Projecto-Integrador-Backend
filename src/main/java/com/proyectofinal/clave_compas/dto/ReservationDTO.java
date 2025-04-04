@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import com.proyectofinal.clave_compas.util.ReservationStatus;
 
@@ -33,10 +35,13 @@ public class ReservationDTO {
     @Positive(message = "Quantity must be a positive number")
     private Integer quantity;
 
-    @NotNull(message = "Product ID cannot be null")
+    /*@NotNull(message = "Product ID cannot be null")
     @Positive(message = "Product ID must be a positive number")
-    private Integer productId;
-    
+    private Integer productId;*/
+    @NotNull
+    @Positive(message = "totalPrice must be a positive number")
+    private BigDecimal totalPrice;
+
     @NotNull(message = "Status cannot be null")
     private ReservationStatus status;
 

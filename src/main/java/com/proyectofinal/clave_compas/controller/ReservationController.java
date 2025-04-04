@@ -2,6 +2,7 @@ package com.proyectofinal.clave_compas.controller;
 
 import com.proyectofinal.clave_compas.bd.clavecompas.entities.ReservationEntity;
 import com.proyectofinal.clave_compas.dto.ReservationDTO;
+import com.proyectofinal.clave_compas.mappers.ReservationMapper;
 import com.proyectofinal.clave_compas.service.ReservationService;
 import com.proyectofinal.clave_compas.util.Constants;
 import com.proyectofinal.clave_compas.controller.responses.GlobalResponse;
@@ -35,7 +36,7 @@ public class ReservationController {
         GlobalResponse gres = GlobalResponse.builder()
             .statusCode(HttpStatus.OK.value())
             .message(Constants.MENSAJE_EXITO)
-            .response(reservation)
+            .response(ReservationMapper.INSTANCE.toDTO(reservation))
             .build();
         return ResponseEntity.ok(gres);
     }
