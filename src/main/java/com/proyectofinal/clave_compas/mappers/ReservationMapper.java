@@ -20,13 +20,13 @@ public interface ReservationMapper {
     @Mapping(source = "user.id", target = "idUser")
     @Mapping(source = "product.name", target = "productName") // Agregar nombre del producto
     @Mapping(source = "product.images", target = "productImageUrl", qualifiedByName = "firstImage") // Obtener primera imagen
-    public abstract ReservationDTO toDTO(ReservationEntity reservationEntity);
+    ReservationDTO toDTO(ReservationEntity reservationEntity);
 
     @InheritInverseConfiguration
     @Mapping(source = "idProduct", target = "product.idProduct")
     @Mapping(target = "user", expression = "java(UserEntity.builder().id(integerToLong(reservationDTO.getIdUser())).build())")
     @Mapping(target = "product.images", ignore = true) // Ignorar el mapeo inverso de imágenes
-    public abstract ReservationEntity toEntity(ReservationDTO reservationDTO);
+    ReservationEntity toEntity(ReservationDTO reservationDTO);
     
     default void updateFromDTO(ReservationDTO dto, ReservationEntity entity) {
         if (dto == null || entity == null) return;
@@ -36,7 +36,7 @@ public interface ReservationMapper {
         if (dto.getQuantity() != null) entity.setQuantity(dto.getQuantity());
         if (dto.getStatus() != null) entity.setStatus(dto.getStatus());
 
-        if (dto.getProductId()!= null) entity.setProductId(dto.getProductId());
+        //if (dto.getProductId()!= null) entity.setProductId(dto.getProductId());
 
     }
 

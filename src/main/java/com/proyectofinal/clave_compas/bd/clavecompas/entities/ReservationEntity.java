@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import com.proyectofinal.clave_compas.util.ReservationStatus;
 
@@ -41,7 +43,9 @@ public class ReservationEntity {
     @Enumerated(EnumType.STRING)
     private ReservationStatus status;
 
-    @Column(name = "product_id", nullable = false)
-    private Integer productId;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal totalPrice;
+   /* @Column(name = "product_id", nullable = false)
+    private Integer productId;*/
 
 }
